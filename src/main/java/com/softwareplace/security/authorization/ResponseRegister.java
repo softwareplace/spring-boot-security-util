@@ -27,6 +27,7 @@ public class ResponseRegister {
 		responseParams.put("timestamp", new Date().getTime());
 		responseParams.put("success", false);
 		responseParams.put("code", status);
+		response.setStatus(status);
 		response.setContentType("application/json;charset=UTF-8");
 		responseParams.putAll(params);
 		new ObjectMapper().writeValue(response.getOutputStream(), responseParams);

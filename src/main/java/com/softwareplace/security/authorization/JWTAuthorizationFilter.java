@@ -76,10 +76,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		return new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
 	}
 
-	private String getUsername(HttpServletRequest request) {
+	private String getUsername(HttpServletRequest request) throws UnsupportedOperationException {
+		String authorization = request.getHeader(AUTHORIZATION)
+				.replace("Bearer ", "");
+
 		return Jwts.parser()
 				.setSigningKey(authorizationUserService.secret())
-				.parseClaimsJws(request.getHeader(AUTHORIZATION))
+				.parseClaimsJws(authorization)
 				.getBody()
 				.getSubject();
 	}

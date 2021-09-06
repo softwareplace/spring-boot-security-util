@@ -1,8 +1,6 @@
 package com.softwareplace.security.authorization;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -19,9 +17,6 @@ import com.softwareplace.security.encrypt.Encrypt;
 import com.softwareplace.security.model.RequestUser;
 import com.softwareplace.security.model.UserData;
 import com.softwareplace.security.service.AuthorizationUserService;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 public class JWTAuthenticationFilter extends CustomAuthenticationProcessingFilter {
 	private static final String ACCESS_TOKEN = "accessToken";
@@ -43,9 +38,13 @@ public class JWTAuthenticationFilter extends CustomAuthenticationProcessingFilte
 		if (userData != null) {
 			Encrypt encrypt = new Encrypt(requestUser.getPassword());
 			if (encrypt.isValidPassword(userData.getPassword())) {
-				HashMap<String, Object> claims = new HashMap<>();
-				claims.put(SUB, userData.authToken());
-				httpServletRequest.setAttribute(ACCESS_TOKEN, tokenGenerate(claims));
+				Map<String, Object> claims = authorizationUserService.claims(httpServletRequest);
+
+				if (userData.role() != Integer.MIN_VALUE) {
+					claims.put("role", userData.role());
+				}
+				JWTGenerate jwtGenerate = new JWTGenerate(authorizationUserService);
+				httpServletRequest.setAttribute(ACCESS_TOKEN, jwtGenerate.tokenGenerate(claims, userData.authToken()));
 				return this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userData.authToken(), requestUser.getPassword()));
 			}
 		}
@@ -59,13 +58,5 @@ public class JWTAuthenticationFilter extends CustomAuthenticationProcessingFilte
 	@Override protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
 			throws IOException {
 		authorizationUserService.successfulAuthentication(request, response, chain, authResult);
-	}
-
-	private String tokenGenerate(Map<String, Object> claims) {
-		return Jwts.builder()
-				.setClaims(claims)
-				.setExpiration(new Date(System.currentTimeMillis() + authorizationUserService.expirationTime()))
-				.signWith(SignatureAlgorithm.HS512, authorizationUserService.secret())
-				.compact();
 	}
 }

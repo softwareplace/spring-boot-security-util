@@ -7,4 +7,8 @@ public interface UserData extends UserDetails {
 	String authToken();
 
 	String[] userRoles();
+
+	default int role() {
+		return Integer.MIN_VALUE;
+	}
 }

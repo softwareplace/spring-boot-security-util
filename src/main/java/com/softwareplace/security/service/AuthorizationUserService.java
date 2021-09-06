@@ -32,7 +32,7 @@ public interface AuthorizationUserService {
 		ResponseRegister.register(response, "Authorization successful.", 200, params);
 	}
 
-	default Map<String, Object> claims() {
+	default Map<String, Object> claims(HttpServletRequest httpServletRequest) {
 		return new HashMap<>();
 	}
 }
