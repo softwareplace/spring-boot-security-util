@@ -1,5 +1,11 @@
 package com.softwareplace.security.handler;
 
+import java.io.IOException;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.core.Ordered;
@@ -10,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -26,9 +35,11 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.softwareplace.security.authorization.ResponseRegister;
+
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class ControllerExceptionAdvice extends ResponseEntityExceptionHandler {
+public class ControllerExceptionAdvice extends ResponseEntityExceptionHandler implements AccessDeniedHandler, AuthenticationEntryPoint {
 
 	public static final String COULD_NOT_COMPLETE_THE_REQUEST = "Could not complete the request.";
 	public static final String UNAUTHORIZED_ACCESS = "Access denied.";
@@ -115,7 +126,20 @@ public class ControllerExceptionAdvice extends ResponseEntityExceptionHandler {
 		return errorResponse(request, exception, HttpStatus.UNAUTHORIZED, UNAUTHORIZED_ACCESS);
 	}
 
+	@Override public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException exception)
+			throws IOException {
+		httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		ResponseRegister.register(httpServletResponse, COULD_NOT_COMPLETE_THE_REQUEST, HttpServletResponse.SC_BAD_REQUEST, Map.of());
+	}
+
+	@Override public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException exception)
+			throws IOException {
+		httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		ResponseRegister.register(httpServletResponse);
+	}
+
 	private ResponseEntity<Object> errorResponse(WebRequest request, Exception exception, HttpStatus statusCode, String message) {
 		return new ResponseEntity<>(new ApplicationResponse(statusCode.value(), message), statusCode);
 	}
+
 }
