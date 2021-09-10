@@ -54,6 +54,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 				ResponseRegister.register(response, "The request could not be completed.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, new HashMap<>());
 			}
 		}
+		throw new AccessDeniedException("Access was not authorized on this request.");
 	}
 
 	private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(HttpServletRequest request) {
