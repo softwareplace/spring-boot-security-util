@@ -16,7 +16,7 @@ public interface AuthorizationUserService {
 
 	UserData userData(RequestUser user);
 
-	UserData userData(String username);
+	UserData userData(String authToken);
 
 	long expirationTime();
 

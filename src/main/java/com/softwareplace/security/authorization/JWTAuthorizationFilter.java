@@ -61,9 +61,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	}
 
 	private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(HttpServletRequest request) {
-		String username = getUsername(request);
-		if (username != null) {
-			UserData userData = authorizationUserService.userData(username);
+		String authToken = getAuthToken(request);
+		if (authToken != null) {
+			UserData userData = authorizationUserService.userData(authToken);
 			if (userData != null && userData.userRoles() != null) {
 				return getAuthenticationToken(request, userData);
 			}
@@ -80,7 +80,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		return new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
 	}
 
-	private String getUsername(HttpServletRequest request) throws UnsupportedOperationException {
+	private String getAuthToken(HttpServletRequest request) throws UnsupportedOperationException {
 		String requestHeader = request.getHeader(AUTHORIZATION);
 		if (requestHeader != null) {
 			String authorization = requestHeader
