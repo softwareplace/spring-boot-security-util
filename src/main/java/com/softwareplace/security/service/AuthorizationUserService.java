@@ -1,6 +1,5 @@
 package com.softwareplace.security.service;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
 
-import com.softwareplace.security.authorization.ResponseRegister;
 import com.softwareplace.security.model.RequestUser;
 import com.softwareplace.security.model.UserData;
 
@@ -24,15 +22,11 @@ public interface AuthorizationUserService {
 
 	String secret();
 
-	default void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
-			throws IOException {
-		Map<String, Object> params = new HashMap<>();
-		params.put("jwt", request.getAttribute("accessToken"));
-		params.put("success", true);
-		ResponseRegister.register(response, "Authorization successful.", 200, params);
+	default void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
+
 	}
 
-	default Map<String, Object> claims(HttpServletRequest httpServletRequest) {
+	default Map<String, Object> claims(HttpServletRequest httpServletRequest, UserData userData) {
 		return new HashMap<>();
 	}
 }

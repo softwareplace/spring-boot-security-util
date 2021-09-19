@@ -23,13 +23,17 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import com.softwareplace.security.model.UserData;
 import com.softwareplace.security.service.AuthorizationUserService;
-import com.softwareplace.security.util.Constants;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+
+	public static final String BEARER = "Bearer ";
+	public static final String UNAUTHORIZED_ERROR_MESSAGE = "Access was not authorized on this request.";
+	public static final String ROLE = "ROLE_";
+	public static final String ERROR_RESPONSE_MESSAGE = "The request could not be completed.";
 
 	private final AuthorizationUserService authorizationUserService;
 	private final AuthorizationHandler authorizationHandler;
@@ -43,16 +47,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	@Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException {
-		if (shouldBeAuthorized(request)) {
-			try {
-				SecurityContextHolder.getContext().setAuthentication(getUsernamePasswordAuthenticationToken(request));
-				chain.doFilter(request, response);
-			} catch (HttpClientErrorException.Unauthorized | MalformedJwtException | SignatureException exception) {
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				ResponseRegister.register(response);
-			} catch (Exception exception) {
-				ResponseRegister.register(response, "The request could not be completed.", HttpServletResponse.SC_INTERNAL_SERVER_ERROR, new HashMap<>());
-			}
+		try {
+			SecurityContextHolder.getContext().setAuthentication(getUsernamePasswordAuthenticationToken(request));
+			chain.doFilter(request, response);
+		} catch (HttpClientErrorException.Unauthorized | MalformedJwtException | AccessDeniedException | SignatureException exception) {
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			ResponseRegister.register(response);
+			authorizationHandler.onAuthorizationFailed(request, response, chain, exception);
+		} catch (Exception exception) {
+			ResponseRegister.register(response, ERROR_RESPONSE_MESSAGE, HttpServletResponse.SC_BAD_REQUEST, new HashMap<>());
+			authorizationHandler.onAuthorizationFailed(request, response, chain, exception);
 		}
 	}
 
@@ -64,12 +68,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 				return getAuthenticationToken(request, userData);
 			}
 		}
-		throw new AccessDeniedException("Access was not authorized on this request.");
+		throw new AccessDeniedException(UNAUTHORIZED_ERROR_MESSAGE);
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthenticationToken(HttpServletRequest request, UserData userData) {
 		List<SimpleGrantedAuthority> authorities = Arrays.stream(userData.userRoles())
-				.map(role -> new SimpleGrantedAuthority("ROLE_".concat(role)))
+				.map(role -> new SimpleGrantedAuthority(ROLE.concat(role)))
 				.collect(Collectors.toList());
 		User principal = new User(userData.getUsername(), userData.getUsername(), authorities);
 		authorizationHandler.authorizationSuccessfully(request, userData);
@@ -77,20 +81,16 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	}
 
 	private String getUsername(HttpServletRequest request) throws UnsupportedOperationException {
-		String authorization = request.getHeader(AUTHORIZATION)
-				.replace("Bearer ", "");
-
-		return Jwts.parser()
-				.setSigningKey(authorizationUserService.secret())
-				.parseClaimsJws(authorization)
-				.getBody()
-				.getSubject();
-	}
-
-	private boolean shouldBeAuthorized(HttpServletRequest request) {
 		String requestHeader = request.getHeader(AUTHORIZATION);
-		String requestURI = request.getRequestURI();
-		return !(requestHeader == null ||
-				requestURI.contains(Constants.OPEN_API_URL));
+		if (requestHeader != null) {
+			String authorization = requestHeader
+					.replace(BEARER, "");
+			return Jwts.parser()
+					.setSigningKey(authorizationUserService.secret())
+					.parseClaimsJws(authorization)
+					.getBody()
+					.getSubject();
+		}
+		throw new AccessDeniedException(UNAUTHORIZED_ERROR_MESSAGE);
 	}
 }

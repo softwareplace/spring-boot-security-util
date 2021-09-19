@@ -1,6 +1,7 @@
 package com.softwareplace.security.authorization;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -20,7 +21,9 @@ import com.softwareplace.security.service.AuthorizationUserService;
 
 public class JWTAuthenticationFilter extends CustomAuthenticationProcessingFilter {
 	private static final String ACCESS_TOKEN = "accessToken";
-	private static final String SUB = "sub";
+	public static final String JWT = "jwt";
+	public static final String SUCCESS = "success";
+	public static final String AUTHORIZATION_SUCCESSFUL = "Authorization successful.";
 
 	private final AuthorizationUserService authorizationUserService;
 	private final AuthenticationManager authenticationManager;
@@ -38,11 +41,7 @@ public class JWTAuthenticationFilter extends CustomAuthenticationProcessingFilte
 		if (userData != null) {
 			Encrypt encrypt = new Encrypt(requestUser.getPassword());
 			if (encrypt.isValidPassword(userData.getPassword())) {
-				Map<String, Object> claims = authorizationUserService.claims(httpServletRequest);
-
-				if (userData.role() != Integer.MIN_VALUE) {
-					claims.put("role", userData.role());
-				}
+				Map<String, Object> claims = authorizationUserService.claims(httpServletRequest, userData);
 				JWTGenerate jwtGenerate = new JWTGenerate(authorizationUserService);
 				httpServletRequest.setAttribute(ACCESS_TOKEN, jwtGenerate.tokenGenerate(claims, userData.authToken()));
 				return this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userData.authToken(), requestUser.getPassword()));
@@ -57,6 +56,10 @@ public class JWTAuthenticationFilter extends CustomAuthenticationProcessingFilte
 
 	@Override protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult)
 			throws IOException {
+		Map<String, Object> params = new HashMap<>();
+		params.put(JWT, request.getAttribute(ACCESS_TOKEN));
+		params.put(SUCCESS, true);
+		ResponseRegister.register(response, AUTHORIZATION_SUCCESSFUL, 200, params);
 		authorizationUserService.successfulAuthentication(request, response, chain, authResult);
 	}
 }
