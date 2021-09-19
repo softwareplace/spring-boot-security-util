@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -46,7 +47,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	}
 
 	@Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-			throws IOException {
+			throws IOException, ServletException {
 		try {
 			SecurityContextHolder.getContext().setAuthentication(getUsernamePasswordAuthenticationToken(request));
 			chain.doFilter(request, response);
