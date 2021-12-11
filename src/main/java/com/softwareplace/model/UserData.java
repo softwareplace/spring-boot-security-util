@@ -11,4 +11,16 @@ public interface UserData extends UserDetails {
 	default int role() {
 		return Integer.MIN_VALUE;
 	}
+
+	@Override default boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override default boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override default boolean isCredentialsNonExpired() {
+		return true;
+	}
 }
