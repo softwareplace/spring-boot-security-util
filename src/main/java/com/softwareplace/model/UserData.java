@@ -1,4 +1,4 @@
-package com.softwareplace.security.model;
+package com.softwareplace.model;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

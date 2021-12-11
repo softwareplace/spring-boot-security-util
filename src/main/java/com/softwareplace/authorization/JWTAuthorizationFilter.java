@@ -1,4 +1,4 @@
-package com.softwareplace.security.authorization;
+package com.softwareplace.authorization;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -22,8 +22,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.client.HttpClientErrorException;
 
-import com.softwareplace.security.model.UserData;
-import com.softwareplace.security.service.AuthorizationUserService;
+import com.softwareplace.model.UserData;
+import com.softwareplace.service.AuthorizationUserService;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;

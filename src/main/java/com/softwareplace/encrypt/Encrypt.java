@@ -1,4 +1,4 @@
-package com.softwareplace.security.encrypt;
+package com.softwareplace.encrypt;
 
 import java.util.Random;
 

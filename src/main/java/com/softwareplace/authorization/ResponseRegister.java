@@ -1,4 +1,4 @@
-package com.softwareplace.security.authorization;
+package com.softwareplace.authorization;
 
 import java.io.IOException;
 import java.util.Date;

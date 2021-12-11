@@ -1,4 +1,4 @@
-package com.softwareplace.security.util;
+package com.softwareplace.util;
 
 public class Constants {
 

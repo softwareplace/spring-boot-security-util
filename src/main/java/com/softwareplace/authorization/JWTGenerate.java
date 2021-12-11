@@ -1,9 +1,9 @@
-package com.softwareplace.security.authorization;
+package com.softwareplace.authorization;
 
 import java.util.Date;
 import java.util.Map;
 
-import com.softwareplace.security.service.AuthorizationUserService;
+import com.softwareplace.service.AuthorizationUserService;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

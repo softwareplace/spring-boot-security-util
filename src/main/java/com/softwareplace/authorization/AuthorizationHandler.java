@@ -1,10 +1,10 @@
-package com.softwareplace.security.authorization;
+package com.softwareplace.authorization;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.softwareplace.security.model.UserData;
+import com.softwareplace.model.UserData;
 
 public interface AuthorizationHandler {
 

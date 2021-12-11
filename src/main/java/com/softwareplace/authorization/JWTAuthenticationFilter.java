@@ -1,4 +1,4 @@
-package com.softwareplace.security.authorization;
+package com.softwareplace.authorization;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,10 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.softwareplace.security.encrypt.Encrypt;
-import com.softwareplace.security.model.RequestUser;
-import com.softwareplace.security.model.UserData;
-import com.softwareplace.security.service.AuthorizationUserService;
+import com.softwareplace.encrypt.Encrypt;
+import com.softwareplace.model.RequestUser;
+import com.softwareplace.model.UserData;
+import com.softwareplace.service.AuthorizationUserService;
 
 public class JWTAuthenticationFilter extends CustomAuthenticationProcessingFilter {
 	private static final String ACCESS_TOKEN = "accessToken";

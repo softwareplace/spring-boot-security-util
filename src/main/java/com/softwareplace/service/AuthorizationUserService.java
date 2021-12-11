@@ -1,4 +1,4 @@
-package com.softwareplace.security.service;
+package com.softwareplace.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
 
-import com.softwareplace.security.model.RequestUser;
-import com.softwareplace.security.model.UserData;
+import com.softwareplace.model.RequestUser;
+import com.softwareplace.model.UserData;
 
 public interface AuthorizationUserService {
 
