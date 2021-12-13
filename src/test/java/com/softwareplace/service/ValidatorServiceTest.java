@@ -1,7 +1,10 @@
 package com.softwareplace.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,6 +33,23 @@ class ValidatorServiceTest {
 	@DisplayName("must no to throw IllegalConstraintsException when password is valid")
 	void validateTestCase02(String password) {
 		assertDoesNotThrow(() -> validatorService.validate(new TestUser(password)));
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = { "123", "sadfasf", "ADADSAFDF", "fdsafdsafdFIFDkldlfkjafdlkjafddD" })
+	@DisplayName("must to throw IllegalConstraintsException when password is not valid")
+	void validateTestCase03(String password) {
+		IllegalConstraintsException constraintsException = null;
+
+		try {
+			validatorService.validate(new TestUser(password));
+		} catch (IllegalConstraintsException exception) {
+			constraintsException = exception;
+		}
+
+		assertNotNull(constraintsException);
+		assertFalse(constraintsException.getErrors().isEmpty());
+		assertTrue(constraintsException.getErrors().containsKey("password"));
 	}
 
 	private static class TestUser {
