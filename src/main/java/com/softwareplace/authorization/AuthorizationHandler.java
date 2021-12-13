@@ -8,6 +8,8 @@ import com.softwareplace.model.UserData;
 
 public interface AuthorizationHandler {
 
+	String userRole();
+
 	void authorizationSuccessfully(HttpServletRequest request, UserData userData);
 
 	void onAuthorizationFailed(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Exception exception);

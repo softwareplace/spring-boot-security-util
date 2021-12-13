@@ -1,17 +1,15 @@
-package com.softwareplace.config;
+package com.softwareplace.config
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
+import javax.validation.Validation
+import javax.validation.Validator
 
 @ComponentScan
-public class ValidatorBean {
-
-	@Bean
-	public Validator validator() {
-		return Validation.buildDefaultValidatorFactory()
-				.getValidator();
-	}
+class ValidatorBean {
+    @Bean
+    fun validator(): Validator {
+        return Validation.buildDefaultValidatorFactory()
+            .validator
+    }
 }
