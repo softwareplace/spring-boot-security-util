@@ -1,5 +1,3 @@
-package com.softwareplace.validator;
+package com.softwareplace.validator
 
-public class RuleBuilderImpl implements RuleBuilder {
-
-}
+open class RuleBuilderImpl : RuleBuilder

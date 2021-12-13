@@ -1,33 +1,21 @@
-package com.softwareplace.validator;
+package com.softwareplace.validator
 
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.validation.Constraint
+import javax.validation.Payload
+import kotlin.reflect.KClass
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+@MustBeDocumented
+@Constraint(validatedBy = [PasswordConstraintValidator::class])
+@Target(AnnotationTarget.FIELD, AnnotationTarget.ANNOTATION_CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ValidPassword(
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
-import javax.validation.constraints.NotNull;
-
-@Documented
-@Constraint(validatedBy = PasswordConstraintValidator.class)
-@Target({ FIELD, ANNOTATION_TYPE })
-@Retention(RUNTIME)
-public @interface ValidPassword {
-
-	/**
-	 * The class that implements on {@link RuleBuilder} must to
-	 * contains a public constructor with no arguments
-	 */
-	@NotNull
-	Class<? extends RuleBuilder> rulesBuilder() default RuleBuilderImpl.class;
-
-	String message() default "Invalid Password";
-
-	Class<?>[] groups() default {};
-
-	Class<? extends Payload>[] payload() default {};
-}
+    /**
+     * The class that implements on [RuleBuilder] must to
+     * contains a public constructor with no arguments
+     */
+    val rulesBuilder: KClass<out RuleBuilder> = RuleBuilderImpl::class,
+    val message: String = "Invalid Password",
+    val groups: Array<KClass<*>> = [],
+    val payload: Array<KClass<out Payload>> = []
+)

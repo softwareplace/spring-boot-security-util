@@ -1,32 +1,20 @@
-package com.softwareplace.service;
+package com.softwareplace.service
 
-import java.util.HashMap;
-import java.util.Map;
+import com.softwareplace.model.RequestUser
+import com.softwareplace.model.UserData
+import org.springframework.security.core.Authentication
+import javax.servlet.FilterChain
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+interface AuthorizationUserService {
 
-import org.springframework.security.core.Authentication;
-
-import com.softwareplace.model.RequestUser;
-import com.softwareplace.model.UserData;
-
-public interface AuthorizationUserService {
-
-	UserData userData(RequestUser user);
-
-	UserData userData(String authToken);
-
-	long expirationTime();
-
-	String secret();
-
-	default void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
-
-	}
-
-	default Map<String, Object> claims(HttpServletRequest httpServletRequest, UserData userData) {
-		return new HashMap<>();
-	}
+    fun userData(user: RequestUser): UserData?
+    fun userData(authToken: String): UserData?
+    fun expirationTime(): Long
+    fun secret(): String
+    fun successfulAuthentication(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, authResult: Authentication) {}
+    fun claims(httpServletRequest: HttpServletRequest?, userData: UserData): Map<String, Any> {
+        return HashMap()
+    }
 }

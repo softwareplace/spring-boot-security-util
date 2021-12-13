@@ -7,7 +7,7 @@ import com.softwareplace.service.AuthorizationUserService
 import org.springframework.security.authentication.AuthenticationManager
 import javax.servlet.http.HttpServletRequest
 
-class CustomJWTAuthorizationFilter(
+open class CustomJWTAuthorizationFilter(
     authenticationManager: AuthenticationManager,
     authorizationUserService: AuthorizationUserService,
     authorizationHandler: AuthorizationHandler,
@@ -18,7 +18,7 @@ class CustomJWTAuthorizationFilter(
         return openUrl(request.requestURI)
     }
 
-    private fun openUrl(requestPath: String): Boolean {
+    open fun openUrl(requestPath: String): Boolean {
         for (path in applicationInfo.openUrl.split(",")) {
             if (requestPath.contains(path)) {
                 return true

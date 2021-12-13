@@ -1,26 +1,26 @@
-package com.softwareplace.model;
+package com.softwareplace.model
 
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetails
 
-public interface UserData extends UserDetails {
+interface UserData : UserDetails {
 
-	String authToken();
+    fun authToken(): String
 
-	String[] userRoles();
+    fun userRoles(): Array<String>
 
-	default int role() {
-		return Integer.MIN_VALUE;
-	}
+    fun role(): Int {
+        return Int.MIN_VALUE
+    }
 
-	@Override default boolean isAccountNonExpired() {
-		return true;
-	}
+    override fun isAccountNonExpired(): Boolean {
+        return true
+    }
 
-	@Override default boolean isAccountNonLocked() {
-		return true;
-	}
+    override fun isAccountNonLocked(): Boolean {
+        return true
+    }
 
-	@Override default boolean isCredentialsNonExpired() {
-		return true;
-	}
+    override fun isCredentialsNonExpired(): Boolean {
+        return true
+    }
 }

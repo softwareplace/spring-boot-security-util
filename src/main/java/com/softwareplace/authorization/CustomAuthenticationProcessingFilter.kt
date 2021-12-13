@@ -1,10 +1,7 @@
-package com.softwareplace.authorization;
+package com.softwareplace.authorization
 
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
-abstract class CustomAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {
-	protected CustomAuthenticationProcessingFilter() {
-		super(new AntPathRequestMatcher("/authorization", "POST"));
-	}
-}
+abstract class CustomAuthenticationProcessingFilter protected constructor() :
+    AbstractAuthenticationProcessingFilter(AntPathRequestMatcher("/authorization", "POST"))
