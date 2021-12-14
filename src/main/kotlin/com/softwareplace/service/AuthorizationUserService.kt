@@ -14,7 +14,7 @@ interface AuthorizationUserService {
     fun expirationTime(): Long
     fun secret(): String
     fun successfulAuthentication(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, authResult: Authentication) {}
-    fun claims(httpServletRequest: HttpServletRequest?, userData: UserData): Map<String, Any> {
+    fun claims(httpServletRequest: HttpServletRequest, userData: UserData): Map<String, Any> {
         return HashMap()
     }
 }
