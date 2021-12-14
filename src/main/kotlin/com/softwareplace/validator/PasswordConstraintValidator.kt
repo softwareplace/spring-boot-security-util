@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 import kotlin.reflect.full.primaryConstructor
 
-class PasswordConstraintValidator : ConstraintValidator<ValidPassword, String?> {
+class PasswordConstraintValidator : ConstraintValidator<ValidPassword, String> {
     private var rules: List<Rule>? = null
     override fun initialize(constraintAnnotation: ValidPassword) {
         rules = try {

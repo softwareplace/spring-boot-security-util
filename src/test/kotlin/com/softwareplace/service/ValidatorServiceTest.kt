@@ -17,7 +17,7 @@ internal class ValidatorServiceTest {
     @ParameterizedTest
     @ValueSource(strings = ["123", "sadfasf", "ADADSAFDF", "fdsafdsafdFIFDkldlfkjafdlkjafddD"])
     fun `must to throw IllegalConstraintsException when password is not valid`(password: String?) {
-        assertThrows(IllegalConstraintsException::class.java) { validatorService!!.validate(TestUser(password)) }
+        assertThrows(IllegalConstraintsException::class.java) { validatorService.validate(TestUser(password)) }
     }
 
     @ParameterizedTest

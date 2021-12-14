@@ -16,7 +16,7 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
-abstract class WebSecurityConfig(
+open class CustomWebSecurityConfigurerAdapter(
     private val userDetailsService: UserDetailsService,
     private val authorizationUserService: AuthorizationUserService,
     private val authorizationHandler: AuthorizationHandler,
@@ -28,7 +28,7 @@ abstract class WebSecurityConfig(
     override fun configure(http: HttpSecurity) {
         val docUrl = applicationInfo.openUrl.split(",")
         docUrl.forEach {
-            http.authorizeRequests().antMatchers(it).permitAll()
+            http.authorizeRequests().antMatchers("/**/$it/**").permitAll()
         }
 
         http.cors().and().csrf().disable()
