@@ -6,7 +6,7 @@
 
     <groupId>com.softwareplace</groupId>
     <artifactId>spring-boot-security-util</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -84,11 +84,9 @@
     </distributionManagement>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <artifactId>kotlin-maven-plugin</artifactId>
                 <groupId>org.jetbrains.kotlin</groupId>
