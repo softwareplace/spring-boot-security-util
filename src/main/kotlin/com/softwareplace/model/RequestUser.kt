@@ -1,6 +1,8 @@
 package com.softwareplace.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class RequestUser(
-    var username: String,
-    var password: String
+    @field:JsonProperty("username") val username: String,
+    @field:JsonProperty("password") val password: String
 )

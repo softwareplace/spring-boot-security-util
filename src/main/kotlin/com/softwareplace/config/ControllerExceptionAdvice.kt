@@ -197,6 +197,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     @ExceptionHandler(IllegalConstraintsException::class)
     fun constraintViolationException(request: HttpServletRequest, ex: IllegalConstraintsException): ResponseEntity<Response> {
         val infoMap = hashMapOf<String, Any>("badRequest" to true)
+        infoMap.putAll(ex.errors)
         return ResponseEntity<Response>(
             Response(
                 info = infoMap,

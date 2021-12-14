@@ -1,6 +1,7 @@
 package com.softwareplace.authorization
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.softwareplace.encrypt.Encrypt
 import com.softwareplace.model.RequestUser
 import com.softwareplace.service.AuthorizationUserService
@@ -20,7 +21,10 @@ class JWTAuthenticationFilter(
 
     @Throws(AuthenticationException::class, IOException::class)
     override fun attemptAuthentication(httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse): Authentication? {
-        val requestUser = ObjectMapper().readValue(httpServletRequest.inputStream, RequestUser::class.java)
+        val objectMapper = ObjectMapper()
+        objectMapper.registerModule(KotlinModule.Builder().build())
+
+        val requestUser = objectMapper.readValue(httpServletRequest.inputStream, RequestUser::class.java)
         val userData = authorizationUserService.userData(requestUser)
         if (userData != null) {
             val encrypt = Encrypt(requestUser.password)
