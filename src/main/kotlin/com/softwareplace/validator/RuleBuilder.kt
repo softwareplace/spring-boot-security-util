@@ -53,7 +53,7 @@ interface RuleBuilder {
         return WhitespaceRule()
     }
 
-    fun defaultRules(): List<Rule>? {
+    fun defaultRules(): List<Rule> {
         return listOf(
             lengthRule(),
             upperCaseRule(),

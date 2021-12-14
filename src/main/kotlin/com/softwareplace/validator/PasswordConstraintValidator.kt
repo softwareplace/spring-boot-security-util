@@ -1,42 +1,37 @@
-package com.softwareplace.validator;
+package com.softwareplace.validator
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
+import org.passay.PasswordData
+import org.passay.PasswordValidator
+import org.passay.Rule
+import java.lang.String.join
+import javax.validation.ConstraintValidator
+import javax.validation.ConstraintValidatorContext
+import kotlin.reflect.full.primaryConstructor
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+class PasswordConstraintValidator : ConstraintValidator<ValidPassword, String?> {
+    private var rules: List<Rule>? = null
+    override fun initialize(constraintAnnotation: ValidPassword) {
+        rules = try {
+            constraintAnnotation.rulesBuilder.primaryConstructor!!.call().defaultRules()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            RuleBuilderImpl().defaultRules()
+        }
+    }
 
-import org.passay.PasswordData;
-import org.passay.PasswordValidator;
-import org.passay.Rule;
-import org.passay.RuleResult;
+    override fun isValid(password: String?, context: ConstraintValidatorContext): Boolean {
+        val validator = PasswordValidator(rules)
+        val result = validator.validate(PasswordData(password))
 
-public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
+        if (result.isValid) {
+            return true
+        }
 
-	private List<Rule> rules;
-
-	@Override public void initialize(ValidPassword constraintAnnotation) {
-		try {
-			this.rules = constraintAnnotation.rulesBuilder().getDeclaredConstructor().newInstance().defaultRules();
-		} catch (InstantiationException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-			e.printStackTrace();
-			rules = new RuleBuilderImpl().defaultRules();
-		}
-	}
-
-	@Override public boolean isValid(String password, ConstraintValidatorContext context) {
-
-		PasswordValidator validator = new PasswordValidator(rules);
-		RuleResult result = validator.validate(new PasswordData(password));
-		if (result.isValid()) {
-			return true;
-		}
-		List<String> messages = validator.getMessages(result);
-
-		String messageTemplate = String.join(",", messages);
-		context.buildConstraintViolationWithTemplate(messageTemplate)
-				.addConstraintViolation()
-				.disableDefaultConstraintViolation();
-		return false;
-	}
+        val messages = validator.getMessages(result)
+        val messageTemplate = join(",", messages)
+        context.buildConstraintViolationWithTemplate(messageTemplate)
+            .addConstraintViolation()
+            .disableDefaultConstraintViolation()
+        return false
+    }
 }
