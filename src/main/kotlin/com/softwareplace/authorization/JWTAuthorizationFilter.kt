@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
@@ -53,8 +54,12 @@ open class JWTAuthorizationFilter(
         userData?.run {
             authorizationHandler.authorizationSuccessfully(request, userData)
             request.setAttribute(USER_SESSION_DATA, userData)
+
+            val authorities = userData.userRoles()
+                .map { role: String -> SimpleGrantedAuthority("$ROLE$role") }
+
             val principal = User(userData.username, userData.password, authorities)
-            return UsernamePasswordAuthenticationToken(principal, null, userData.authorities)
+            return UsernamePasswordAuthenticationToken(principal, null, authorities)
         }
 
         throw AccessDeniedException(UNAUTHORIZED_ERROR_MESSAGE)
