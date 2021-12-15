@@ -1,5 +1,8 @@
 package com.softwareplace.model
 
+import com.softwareplace.authorization.JWTAuthorizationFilter
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 
 interface UserData : UserDetails {
@@ -23,4 +26,11 @@ interface UserData : UserDetails {
     override fun isCredentialsNonExpired(): Boolean {
         return true
     }
+}
+
+fun UserData.authoritiesRoles() = userRoles()
+    .map { role: String -> SimpleGrantedAuthority("${JWTAuthorizationFilter.ROLE}$role") }
+
+fun UserData.toAuthorizationUser(): User {
+    return User(username, password, authoritiesRoles())
 }

@@ -31,6 +31,7 @@ class JWTAuthenticationFilter(
             if (encrypt.isValidPassword(userData.password)) {
                 val claims = authorizationUserService.claims(httpServletRequest, userData)
                 val jwtGenerate = JWTGenerate(authorizationUserService)
+                httpServletRequest.setAttribute(JWTAuthorizationFilter.USER_SESSION_DATA, userData)
                 httpServletRequest.setAttribute(ACCESS_TOKEN, jwtGenerate.tokenGenerate(claims, userData.authToken()))
                 return this.authManager.authenticate(UsernamePasswordAuthenticationToken(userData.authToken(), requestUser.password))
             }

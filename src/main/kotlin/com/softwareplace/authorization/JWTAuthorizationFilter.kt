@@ -1,6 +1,7 @@
 package com.softwareplace.authorization
 
 import com.softwareplace.authorization.ResponseRegister.register
+import com.softwareplace.model.toAuthorizationUser
 import com.softwareplace.service.AuthorizationUserService
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
@@ -9,9 +10,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.web.client.HttpClientErrorException.Unauthorized
 import java.io.IOException
@@ -54,12 +53,8 @@ open class JWTAuthorizationFilter(
         userData?.run {
             authorizationHandler.authorizationSuccessfully(request, userData)
             request.setAttribute(USER_SESSION_DATA, userData)
-
-            val authorities = userData.userRoles()
-                .map { role: String -> SimpleGrantedAuthority("$ROLE$role") }
-
-            val principal = User(userData.username, userData.password, authorities)
-            return UsernamePasswordAuthenticationToken(principal, null, authorities)
+            val authorizationUser = this.toAuthorizationUser()
+            return UsernamePasswordAuthenticationToken(authorizationUser, null, authorizationUser.authorities)
         }
 
         throw AccessDeniedException(UNAUTHORIZED_ERROR_MESSAGE)
