@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse
 
 interface AuthorizationUserService {
 
-    fun userData(user: RequestUser): UserData?
-    fun userData(authToken: String): UserData?
+    fun findUser(user: RequestUser): UserData?
+    fun findUser(authToken: String): UserData?
     fun expirationTime(): Long
-    fun secret(): String
+    fun authorizationSecrete(): String
     fun successfulAuthentication(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, authResult: Authentication) {}
     fun claims(httpServletRequest: HttpServletRequest, userData: UserData): Map<String, Any> {
         return HashMap()

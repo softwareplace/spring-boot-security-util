@@ -24,17 +24,17 @@ open class App {
 
     @Bean
     open fun authorizationUserService() = object : AuthorizationUserService {
-        override fun userData(user: RequestUser): UserData? {
+        override fun findUser(user: RequestUser): UserData? {
             return null
         }
 
-        override fun userData(authToken: String): UserData? {
+        override fun findUser(authToken: String): UserData? {
             return null
         }
 
         override fun expirationTime() = System.currentTimeMillis()
 
-        override fun secret() = UUID.randomUUID().toString()
+        override fun authorizationSecrete() = UUID.randomUUID().toString()
     }
 
     @Bean

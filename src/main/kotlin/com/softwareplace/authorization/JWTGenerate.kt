@@ -13,7 +13,7 @@ class JWTGenerate(private val authorizationUserService: AuthorizationUserService
             .setSubject(subject)
             .setIssuedAt(Date(System.currentTimeMillis()))
             .setExpiration(Date(System.currentTimeMillis() + authorizationUserService.expirationTime()))
-            .signWith(SignatureAlgorithm.HS512, authorizationUserService.secret())
+            .signWith(SignatureAlgorithm.HS512, authorizationUserService.authorizationSecrete())
             .setHeaderParams(mapOf("typ" to "JWT"))
             .compact()
     }

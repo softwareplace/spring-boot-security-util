@@ -25,7 +25,7 @@ class JWTAuthenticationFilter(
         objectMapper.registerModule(KotlinModule.Builder().build())
 
         val requestUser = objectMapper.readValue(httpServletRequest.inputStream, RequestUser::class.java)
-        val userData = authorizationUserService.userData(requestUser)
+        val userData = authorizationUserService.findUser(requestUser)
         if (userData != null) {
             val encrypt = Encrypt(requestUser.password)
             if (encrypt.isValidPassword(userData.password)) {
