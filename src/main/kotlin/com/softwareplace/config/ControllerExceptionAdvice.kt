@@ -176,12 +176,12 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
 
 
     @ExceptionHandler(AccessDeniedException::class)
-    fun handleAccessDeniedException(response: HttpServletRequest): ResponseEntity<Response> {
+    open fun handleAccessDeniedException(response: HttpServletRequest): ResponseEntity<*> {
         return unauthorizedAccess()
     }
 
     @ExceptionHandler(AuthenticationCredentialsNotFoundException::class)
-    fun handleAccessDeniedExceptionAuthentication(request: WebRequest?, ex: AuthenticationCredentialsNotFoundException): ResponseEntity<Response> {
+    open fun handleAccessDeniedExceptionAuthentication(request: WebRequest?, ex: AuthenticationCredentialsNotFoundException): ResponseEntity<*> {
         return unauthorizedAccess(ex)
     }
 
@@ -195,7 +195,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     }
 
     @ExceptionHandler(IllegalConstraintsException::class)
-    fun constraintViolationException(request: HttpServletRequest, ex: IllegalConstraintsException): ResponseEntity<Response> {
+    fun constraintViolationException(request: HttpServletRequest, ex: IllegalConstraintsException): ResponseEntity<*> {
         val infoMap = hashMapOf<String, Any>("badRequest" to true)
         infoMap.putAll(ex.errors)
         return ResponseEntity<Response>(

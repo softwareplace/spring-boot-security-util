@@ -10,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 import org.springframework.web.client.HttpClientErrorException.Unauthorized
 import java.io.IOException
@@ -52,7 +53,8 @@ open class JWTAuthorizationFilter(
         userData?.run {
             authorizationHandler.authorizationSuccessfully(request, userData)
             request.setAttribute(USER_SESSION_DATA, userData)
-            return UsernamePasswordAuthenticationToken(userData, null, userData.authorities)
+            val principal = User(userData.username, userData.password, authorities)
+            return UsernamePasswordAuthenticationToken(principal, null, userData.authorities)
         }
 
         throw AccessDeniedException(UNAUTHORIZED_ERROR_MESSAGE)
