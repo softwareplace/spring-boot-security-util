@@ -12,7 +12,7 @@ open class CustomJWTAuthorizationFilter(
     authorizationUserService: AuthorizationUserService,
     authorizationHandler: AuthorizationHandler,
     private val applicationInfo: ApplicationInfo
-) : JWTAuthorizationFilter(authenticationManager, authorizationUserService, authorizationHandler) {
+) : JWTAuthorizationFilter(authenticationManager, authorizationUserService, authorizationHandler, applicationInfo) {
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         return openUrl(request.requestURI)

@@ -39,7 +39,7 @@ open class CustomWebSecurityConfigurerAdapter(
             .accessDeniedHandler(controllerAdvice)
             .and()
             .addFilterBefore(
-                JWTAuthenticationFilter(authorizationUserService, authenticationManager()),
+                JWTAuthenticationFilter(authorizationUserService, authenticationManager(), applicationInfo),
                 BasicAuthenticationFilter::class.java
             )
             .addFilterAfter(

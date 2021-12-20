@@ -1,6 +1,7 @@
 package com.softwareplace.authorization
 
 import com.softwareplace.authorization.ResponseRegister.register
+import com.softwareplace.config.ApplicationInfo
 import com.softwareplace.model.toAuthorizationUser
 import com.softwareplace.service.AuthorizationUserService
 import io.jsonwebtoken.Jwts
@@ -22,7 +23,8 @@ import javax.servlet.http.HttpServletResponse
 open class JWTAuthorizationFilter(
     authenticationManager: AuthenticationManager?,
     private val authorizationUserService: AuthorizationUserService,
-    private val authorizationHandler: AuthorizationHandler
+    private val authorizationHandler: AuthorizationHandler,
+    private val applicationInfo: ApplicationInfo
 ) : BasicAuthenticationFilter(authenticationManager) {
 
     @Throws(IOException::class, ServletException::class)
@@ -69,7 +71,7 @@ open class JWTAuthorizationFilter(
                 .replace(BEARER, "")
 
             return Jwts.parser()
-                .setSigningKey(authorizationUserService.authorizationSecrete())
+                .setSigningKey(applicationInfo.securitySecret)
                 .parseClaimsJws(authorization)
                 .body
                 .subject

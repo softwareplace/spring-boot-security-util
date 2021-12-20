@@ -2,6 +2,7 @@ package com.softwareplace.authorization
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.softwareplace.config.ApplicationInfo
 import com.softwareplace.encrypt.Encrypt
 import com.softwareplace.model.RequestUser
 import com.softwareplace.service.AuthorizationUserService
@@ -16,7 +17,8 @@ import javax.servlet.http.HttpServletResponse
 
 class JWTAuthenticationFilter(
     private val authorizationUserService: AuthorizationUserService,
-    private val authManager: AuthenticationManager
+    private val authManager: AuthenticationManager,
+    private val applicationInfo: ApplicationInfo
 ) : CustomAuthenticationProcessingFilter() {
 
     @Throws(AuthenticationException::class, IOException::class)
@@ -30,7 +32,7 @@ class JWTAuthenticationFilter(
             val encrypt = Encrypt(requestUser.password)
             if (encrypt.isValidPassword(userData.password)) {
                 val claims = authorizationUserService.claims(httpServletRequest, userData)
-                val jwtGenerate = JWTGenerate(authorizationUserService)
+                val jwtGenerate = JWTGenerate(applicationInfo)
                 httpServletRequest.setAttribute(JWTAuthorizationFilter.USER_SESSION_DATA, userData)
                 httpServletRequest.setAttribute(ACCESS_TOKEN, jwtGenerate.tokenGenerate(claims, userData.authToken()))
                 return this.authManager.authenticate(UsernamePasswordAuthenticationToken(userData.authToken(), requestUser.password))

@@ -1,7 +1,6 @@
 package com.softwareplace
 
 import com.softwareplace.authorization.AuthorizationHandler
-import com.softwareplace.config.ApplicationInfo
 import com.softwareplace.config.ControllerExceptionAdvice
 import com.softwareplace.model.RequestUser
 import com.softwareplace.model.UserData
@@ -10,7 +9,6 @@ import com.softwareplace.service.ValidatorService
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.security.core.userdetails.UserDetailsService
-import java.util.*
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -31,10 +29,6 @@ open class App {
         override fun findUser(authToken: String): UserData? {
             return null
         }
-
-        override fun expirationTime() = System.currentTimeMillis()
-
-        override fun authorizationSecrete() = UUID.randomUUID().toString()
     }
 
     @Bean
@@ -47,9 +41,6 @@ open class App {
         override fun onAuthorizationFailed(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, exception: Exception) {
         }
     }
-
-    @Bean
-    open fun applicationInfo() = object : ApplicationInfo() {}.apply { openUrl = "health" }
 
     @Bean
     open fun controllerAdvice() = object : ControllerExceptionAdvice() {}

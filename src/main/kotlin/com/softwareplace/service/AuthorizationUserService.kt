@@ -11,8 +11,6 @@ interface AuthorizationUserService {
 
     fun findUser(user: RequestUser): UserData?
     fun findUser(authToken: String): UserData?
-    fun expirationTime(): Long
-    fun authorizationSecrete(): String
     fun successfulAuthentication(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, authResult: Authentication) {}
     fun claims(httpServletRequest: HttpServletRequest, userData: UserData): Map<String, Any> {
         return HashMap()
