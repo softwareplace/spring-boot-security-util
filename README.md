@@ -8,7 +8,7 @@
 
 ## Initialization
 
-- Implementation required
+- Required beans
 
 > [SpringSecurityUtilInitializer](src/main/kotlin/com/softwareplace/config/SpringSecurityUtilInitializer.kt)
 >
