@@ -28,9 +28,8 @@ interface UserData : UserDetails {
     }
 }
 
-fun UserData.authoritiesRoles() = userRoles()
-    .map { role: String -> SimpleGrantedAuthority("${JWTAuthorizationFilter.ROLE}$role") }
+val UserData.authoritiesRoles
+    get() = userRoles()
+        .map { role: String -> SimpleGrantedAuthority("${JWTAuthorizationFilter.ROLE}$role") }
 
-fun UserData.toAuthorizationUser(): User {
-    return User(username, password, authoritiesRoles())
-}
+val UserData.toAuthorizationUser get() = User(username, password, authoritiesRoles)

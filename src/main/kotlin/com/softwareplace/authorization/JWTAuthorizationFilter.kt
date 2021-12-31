@@ -55,8 +55,7 @@ open class JWTAuthorizationFilter(
         userData?.run {
             authorizationHandler.authorizationSuccessfully(request, userData)
             request.setAttribute(USER_SESSION_DATA, userData)
-            val authorizationUser = this.toAuthorizationUser()
-            return UsernamePasswordAuthenticationToken(authorizationUser, null, authorizationUser.authorities)
+            return UsernamePasswordAuthenticationToken(toAuthorizationUser, null, toAuthorizationUser.authorities)
         }
 
         throw AccessDeniedException(UNAUTHORIZED_ERROR_MESSAGE)
