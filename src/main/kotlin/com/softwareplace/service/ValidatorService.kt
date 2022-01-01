@@ -1,8 +1,8 @@
 package com.softwareplace.service
 
 import com.softwareplace.exception.IllegalConstraintsException
+import com.softwareplace.extension.addAtStartAsCamelCase
 import java.util.*
-import java.util.function.Consumer
 import java.util.stream.Collectors
 import javax.validation.ConstraintViolation
 import javax.validation.Validator
@@ -21,17 +21,18 @@ open class ValidatorService constructor(
 
     open fun <T> getMessagesFromConstraintViolation(constraintViolations: Set<ConstraintViolation<T>>): Map<String, MutableList<String>> {
         val errors = HashMap<String, MutableList<String>>()
-        constraintViolations.forEach(Consumer { constraintViolation: ConstraintViolation<T> ->
+        constraintViolations.forEach { constraintViolation: ConstraintViolation<T> ->
             val messages = Arrays.stream(constraintViolation.messageTemplate.split(",".toRegex()).toTypedArray())
                 .collect(Collectors.toList())
-            messages.forEach(Consumer { message: String ->
-                val fieldName = Arrays.stream(message.split("\\s".toRegex()).toTypedArray()).findFirst()
+
+            messages.forEach { message: String ->
+                val fieldName: Optional<String> = Arrays.stream(message.split("\\s".toRegex()).toTypedArray()).findFirst()
                 fieldName.ifPresent { value: String ->
-                    errors.computeIfAbsent(value.lowercase()) { ArrayList() }
+                    errors.computeIfAbsent(value.addAtStartAsCamelCase("invalid")) { ArrayList() }
                         .add(message)
                 }
-            })
-        })
+            }
+        }
         return errors
     }
 }
