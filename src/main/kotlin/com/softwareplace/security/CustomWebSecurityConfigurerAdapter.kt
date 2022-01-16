@@ -6,15 +6,11 @@ import com.softwareplace.config.ApplicationInfo
 import com.softwareplace.config.ControllerExceptionAdvice
 import com.softwareplace.encrypt.Encrypt
 import com.softwareplace.service.AuthorizationUserService
-import org.springframework.context.annotation.Bean
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.CorsConfigurationSource
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 open class CustomWebSecurityConfigurerAdapter(
     private val userDetailsService: UserDetailsService,
@@ -46,18 +42,6 @@ open class CustomWebSecurityConfigurerAdapter(
                 CustomJWTAuthorizationFilter(authenticationManager(), authorizationUserService, authorizationHandler, applicationInfo),
                 BasicAuthenticationFilter::class.java
             )
-    }
-
-    @Bean
-    open fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("*")
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
-        configuration.allowedHeaders = listOf("authorization", "content-type", "x-auth-token", "authentication")
-        configuration.exposedHeaders = listOf("x-auth-token")
-        val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration("/**", configuration)
-        return source
     }
 
     @Throws(Exception::class)
