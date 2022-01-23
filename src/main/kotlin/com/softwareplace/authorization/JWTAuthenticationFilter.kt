@@ -1,7 +1,7 @@
 package com.softwareplace.authorization
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.softwareplace.config.ApplicationInfo
 import com.softwareplace.encrypt.Encrypt
 import com.softwareplace.model.RequestUser
@@ -23,23 +23,34 @@ class JWTAuthenticationFilter(
 
     @Throws(AuthenticationException::class, IOException::class)
     override fun attemptAuthentication(httpServletRequest: HttpServletRequest, httpServletResponse: HttpServletResponse): Authentication? {
-        val objectMapper = ObjectMapper()
-        objectMapper.registerModule(KotlinModule.Builder().build())
 
-        val requestUser = objectMapper.readValue(httpServletRequest.inputStream, RequestUser::class.java)
-        val userData = authorizationUserService.findUser(requestUser)
-        if (userData != null) {
-            val encrypt = Encrypt(requestUser.password)
-            if (encrypt.isValidPassword(userData.password)) {
-                val claims = authorizationUserService.claims(httpServletRequest, userData)
-                val jwtGenerate = JWTGenerate(applicationInfo)
-                httpServletRequest.setAttribute(JWTAuthorizationFilter.USER_SESSION_DATA, userData)
-                httpServletRequest.setAttribute(ACCESS_TOKEN, jwtGenerate.tokenGenerate(claims, userData.authToken()))
-                return this.authManager.authenticate(UsernamePasswordAuthenticationToken(userData.authToken(), requestUser.password))
+        buildUserRequest(httpServletRequest)?.let { requestUser ->
+            authorizationUserService.findUser(requestUser)?.let { userData ->
+                val encrypt = Encrypt(requestUser.password)
+                if (encrypt.isValidPassword(userData.password)) {
+                    val claims = authorizationUserService.claims(httpServletRequest, userData)
+                    val jwtGenerate = JWTGenerate(applicationInfo)
+                    httpServletRequest.setAttribute(JWTAuthorizationFilter.USER_SESSION_DATA, userData)
+                    httpServletRequest.setAttribute(ACCESS_TOKEN, jwtGenerate.tokenGenerate(claims, userData.authToken()))
+                    return this.authManager.authenticate(UsernamePasswordAuthenticationToken(userData.authToken(), requestUser.password))
+                }
             }
         }
+
         httpServletResponse.status = HttpServletResponse.SC_UNAUTHORIZED
         ResponseRegister.register(httpServletResponse)
+        return null
+    }
+
+    private fun buildUserRequest(httpServletRequest: HttpServletRequest): RequestUser? {
+        val objectMapper = ObjectMapper()
+        val requestValue = objectMapper.readValue(httpServletRequest.inputStream, object : TypeReference<Map<String, String>>() {})
+
+        requestValue["username"]?.let { username ->
+            requestValue["password"]?.let { password ->
+                return RequestUser(username = username, password = password)
+            }
+        }
         return null
     }
 
