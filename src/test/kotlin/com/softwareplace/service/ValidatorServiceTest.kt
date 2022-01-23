@@ -37,7 +37,7 @@ internal class ValidatorServiceTest {
         }
         assertNotNull(constraintsException)
         assertFalse(constraintsException!!.errors.isEmpty())
-        assertTrue(constraintsException.errors.containsKey("password"))
+        assertTrue(constraintsException.errors.containsKey("invalidPassword"))
     }
 
     private class TestUser(@field:ValidPassword private val password: String?)
