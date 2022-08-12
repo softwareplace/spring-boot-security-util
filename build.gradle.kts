@@ -14,6 +14,7 @@ version = "1.0.0"
 
 dependencies {
     val springBootVersion = "2.6.2"
+    implementation(project(":json-logger"))
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")

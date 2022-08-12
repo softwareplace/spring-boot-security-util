@@ -1,0 +1,3 @@
+[submodule "json-logger"]
+	path = json-logger
+	url = https://github.com/eliasmeireles/json-logger.git
