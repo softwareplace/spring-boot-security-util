@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.exception.IllegalConstraintsException
 import com.softwareplace.model.Response
 import json.logger.log.JsonLog
-import json.logger.log.log
-import org.slf4j.event.Level
+import json.logger.log.loggerk
+import org.apache.logging.log4j.Level
 import org.springframework.beans.ConversionNotSupportedException
 import org.springframework.beans.TypeMismatchException
 import org.springframework.http.HttpHeaders
@@ -187,7 +187,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     open fun serverError(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
         val logMessage = ex.message ?: "Failed to handle the request"
 
-        JsonLog(log)
+        JsonLog(loggerk)
                 .message(logMessage)
                 .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .add("service", request.requestURI)
@@ -209,7 +209,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     open fun serverError(message: String? = null, status: HttpStatus, ex: Exception, headers: HttpHeaders, request: WebRequest): ResponseEntity<Any> {
         val logMessage = message ?: "Failed to handle the request"
 
-        JsonLog(log)
+        JsonLog(loggerk)
                 .message(logMessage)
                 .add("status", status.value())
                 .add("date", LocalDateTime.now())
@@ -241,7 +241,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         val infoMap = hashMapOf<String, Any>("badRequest" to true)
         infoMap.putAll(ex.errors)
 
-        JsonLog(log)
+        JsonLog(loggerk)
                 .message(ex.message ?: "Could not complete the request.")
                 .add("status", HttpStatus.BAD_REQUEST.value())
                 .add("service", request.requestURI)
@@ -260,7 +260,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
 
     open fun unauthorizedAccess(ex: Exception? = null, request: HttpServletRequest): ResponseEntity<Response> {
 
-        JsonLog(log)
+        JsonLog(loggerk)
                 .message("Unauthorized access")
                 .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .add("service", request.requestURI)

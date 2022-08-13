@@ -16,12 +16,6 @@ repositories {
 group = "br.com.softwareplace"
 version = "1.0.0"
 
-configurations {
-    all {
-        exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
-    }
-}
-
 dependencies {
     val springBootVersion = "2.7.2"
     implementation(project(":json-logger"))
@@ -31,10 +25,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation:$springBootVersion")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:$springBootVersion")
 
+    implementation("org.apache.logging.log4j:log4j-api-kotlin:1.2.0")
+
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
-    implementation("org.slf4j:slf4j-api:1.7.36")
 
     implementation("org.passay:passay:1.6.1")
 
