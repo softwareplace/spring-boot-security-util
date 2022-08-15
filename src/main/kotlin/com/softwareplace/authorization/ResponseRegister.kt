@@ -39,6 +39,6 @@ object ResponseRegister {
                 .add("service", request.requestURI)
                 .add("date", LocalDateTime.now())
                 .add("customProperties", responseParams)
-                .run(Level.WARN)
+                .run(Level.INFO)
     }
 }
