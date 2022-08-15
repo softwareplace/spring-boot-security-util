@@ -1,9 +1,9 @@
 package com.softwareplace.config
 
-import br.com.softwareplace.json.logger.log.JsonLog
-import br.com.softwareplace.json.logger.log.loggerk
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.exception.IllegalConstraintsException
+import com.softwareplace.json.logger.log.JsonLog
+import com.softwareplace.json.logger.log.loggerk
 import com.softwareplace.model.Response
 import org.apache.logging.log4j.Level
 import org.springframework.beans.ConversionNotSupportedException

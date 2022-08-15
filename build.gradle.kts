@@ -24,7 +24,7 @@ java {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "br.com.softwareplace"
+            groupId = "com.softwareplace"
             artifactId = "spring-boot-security-utils"
             version = "1.0.0"
 
@@ -33,12 +33,12 @@ publishing {
     }
 }
 
-group = "br.com.softwareplace"
+group = "com.softwareplace"
 version = "1.0.0"
 
 dependencies {
     val springBootVersion = "2.7.2"
-    implementation("br.com.softwareplace:json-logger:1.0.0")
+    implementation("com.softwareplace:json-logger:1.0.0")
 
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")

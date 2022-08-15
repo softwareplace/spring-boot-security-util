@@ -1,9 +1,9 @@
 package com.softwareplace.authorization
 
-import br.com.softwareplace.json.logger.log.JsonLog
-import br.com.softwareplace.json.logger.log.loggerk
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.authorization.JWTAuthenticationFilter.Companion.JWT
+import com.softwareplace.json.logger.log.JsonLog
+import com.softwareplace.json.logger.log.loggerk
 import org.apache.logging.log4j.Level
 import java.io.IOException
 import java.time.LocalDateTime
