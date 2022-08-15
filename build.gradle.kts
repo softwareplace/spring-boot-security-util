@@ -1,8 +1,10 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    `maven-publish`
     id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.0"
@@ -11,6 +13,19 @@ plugins {
 
 repositories {
     mavenCentral()
+    mavenLocal()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "br.com.softwareplace"
+            artifactId = "spring-boot-security-utils"
+            version = "1.0.0"
+
+            from(components["java"])
+        }
+    }
 }
 
 group = "br.com.softwareplace"
@@ -18,7 +33,7 @@ version = "1.0.0"
 
 dependencies {
     val springBootVersion = "2.7.2"
-    implementation(project(":json-logger"))
+    implementation("br.com.softwareplace:json-logger:1.0.0")
 
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
@@ -37,6 +52,10 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt:0.9.1")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
+}
+
+tasks.withType<KotlinCompile> {
+
 }
 
 tasks.withType<Test> {

@@ -10,13 +10,13 @@
 
 - Required beans
 
-> [SpringSecurityUtilInitializer](src/main/kotlin/com/softwareplace/config/SpringSecurityUtilInitializer.kt)
+> [SpringSecurityUtilInitializer](security/src/main/kotlin/com/softwareplace/config/SpringSecurityUtilInitializer.kt)
 >
-> [ControllerExceptionAdvice](src/main/kotlin/com/softwareplace/config/ControllerExceptionAdvice.kt)
+> [ControllerExceptionAdvice](security/src/main/kotlin/com/softwareplace/config/ControllerExceptionAdvice.kt)
 >
-> [AuthorizationHandler](src/main/kotlin/com/softwareplace/authorization/AuthorizationHandler.kt)
+> [AuthorizationHandler](security/src/main/kotlin/com/softwareplace/authorization/AuthorizationHandler.kt)
 >
-> [AuthorizationUserService](src/main/kotlin/com/softwareplace/service/AuthorizationUserService.kt)
+> [AuthorizationUserService](security/src/main/kotlin/com/softwareplace/service/AuthorizationUserService.kt)
 >
 > [UserDetailsService](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetailsService.html)
 

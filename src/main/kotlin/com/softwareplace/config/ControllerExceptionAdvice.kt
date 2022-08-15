@@ -1,10 +1,10 @@
 package com.softwareplace.config
 
+import br.com.softwareplace.json.logger.log.JsonLog
+import br.com.softwareplace.json.logger.log.loggerk
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.exception.IllegalConstraintsException
 import com.softwareplace.model.Response
-import json.logger.log.JsonLog
-import json.logger.log.loggerk
 import org.apache.logging.log4j.Level
 import org.springframework.beans.ConversionNotSupportedException
 import org.springframework.beans.TypeMismatchException
