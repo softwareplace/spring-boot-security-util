@@ -59,6 +59,7 @@ class JWTAuthenticationFilter(
     @Throws(IOException::class)
     override fun successfulAuthentication(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, authResult: Authentication) {
         val params: MutableMap<String, Any> = HashMap()
+        params[JWT] = request.getAttribute(ACCESS_TOKEN)
         params[SUCCESS] = true
         ResponseRegister.register(request, response, AUTHORIZATION_SUCCESSFUL, 200, params)
         authorizationUserService.successfulAuthentication(request, response, chain, authResult)

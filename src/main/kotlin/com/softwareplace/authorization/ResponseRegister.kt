@@ -3,6 +3,7 @@ package com.softwareplace.authorization
 import br.com.softwareplace.json.logger.log.JsonLog
 import br.com.softwareplace.json.logger.log.loggerk
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.softwareplace.authorization.JWTAuthenticationFilter.Companion.JWT
 import org.apache.logging.log4j.Level
 import java.io.IOException
 import java.time.LocalDateTime
@@ -33,12 +34,14 @@ object ResponseRegister {
         responseParams.putAll(params)
         ObjectMapper().writeValue(response.outputStream, responseParams)
 
+        val logParams = responseParams.filter { (k, _) -> k != JWT }
+
         JsonLog(loggerk)
                 .message(responseMessage)
                 .add("status", status)
                 .add("service", request.requestURI)
                 .add("date", LocalDateTime.now())
-                .add("customProperties", responseParams)
+                .add("customProperties", logParams)
                 .run(Level.INFO)
     }
 }
