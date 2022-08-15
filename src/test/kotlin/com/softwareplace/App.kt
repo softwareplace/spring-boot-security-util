@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletResponse
 import javax.validation.Validator
 
 @SpringBootApplication
-open class App {
+class App {
 
     @Bean
-    open fun userDetailsService() = UserDetailsService { null }
+    fun userDetailsService() = UserDetailsService { null }
 
     @Bean
-    open fun authorizationUserService() = object : AuthorizationUserService {
+    fun authorizationUserService() = object : AuthorizationUserService {
         override fun findUser(user: RequestUser): UserData? {
             return null
         }
@@ -32,7 +32,7 @@ open class App {
     }
 
     @Bean
-    open fun authorizationHandler() = object : AuthorizationHandler {
+    fun authorizationHandler() = object : AuthorizationHandler {
         override fun userRole() = "USER"
 
         override fun authorizationSuccessfully(request: HttpServletRequest, userData: UserData) {
@@ -40,11 +40,15 @@ open class App {
 
         override fun onAuthorizationFailed(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, exception: Exception) {
         }
+
+        override fun onAuthorizationFailed(request: HttpServletRequest, response: HttpServletResponse) {
+
+        }
     }
 
     @Bean
-    open fun controllerAdvice() = object : ControllerExceptionAdvice() {}
+    fun controllerAdvice() = object : ControllerExceptionAdvice() {}
 
     @Bean
-    open fun validatorService(validator: Validator) = ValidatorService(validator)
+    fun validatorService(validator: Validator) = ValidatorService(validator)
 }
