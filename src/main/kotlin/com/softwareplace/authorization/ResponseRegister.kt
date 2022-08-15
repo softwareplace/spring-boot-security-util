@@ -1,7 +1,11 @@
 package com.softwareplace.authorization
 
+import br.com.softwareplace.json.logger.log.JsonLog
+import br.com.softwareplace.json.logger.log.loggerk
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.apache.logging.log4j.Level
 import java.io.IOException
+import java.time.LocalDateTime
 import java.util.*
 import javax.servlet.http.HttpServletResponse
 
@@ -26,5 +30,10 @@ object ResponseRegister {
         response.contentType = "application/json;charset=UTF-8"
         responseParams.putAll(params)
         ObjectMapper().writeValue(response.outputStream, responseParams)
+
+        val jsonLog = JsonLog(loggerk)
+
+        responseParams.forEach { (k, v) -> v?.let { jsonLog.add("$k", it) } }
+        jsonLog.run(Level.WARN)
     }
 }
