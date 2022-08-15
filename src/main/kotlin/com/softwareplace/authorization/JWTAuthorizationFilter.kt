@@ -21,10 +21,10 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 open class JWTAuthorizationFilter(
-    authenticationManager: AuthenticationManager?,
-    private val authorizationUserService: AuthorizationUserService,
-    private val authorizationHandler: AuthorizationHandler,
-    private val applicationInfo: ApplicationInfo
+        authenticationManager: AuthenticationManager?,
+        private val authorizationUserService: AuthorizationUserService,
+        private val authorizationHandler: AuthorizationHandler,
+        private val applicationInfo: ApplicationInfo
 ) : BasicAuthenticationFilter(authenticationManager) {
 
     @Throws(IOException::class, ServletException::class)
@@ -39,9 +39,9 @@ open class JWTAuthorizationFilter(
                 is AccessDeniedException,
                 is MalformedJwtException -> {
                     response.status = HttpServletResponse.SC_UNAUTHORIZED
-                    register(response)
+                    register(request, response)
                 }
-                else -> register(response, ERROR_RESPONSE_MESSAGE, HttpServletResponse.SC_BAD_REQUEST, HashMap())
+                else -> register(request, response, ERROR_RESPONSE_MESSAGE, HttpServletResponse.SC_BAD_REQUEST, HashMap())
             }
 
             authorizationHandler.onAuthorizationFailed(request, response, chain, exception)
@@ -67,13 +67,13 @@ open class JWTAuthorizationFilter(
 
         requestHeader?.run {
             val authorization = this
-                .replace(BEARER, "")
+                    .replace(BEARER, "")
 
             return Jwts.parser()
-                .setSigningKey(applicationInfo.securitySecret)
-                .parseClaimsJws(authorization)
-                .body
-                .subject
+                    .setSigningKey(applicationInfo.securitySecret)
+                    .parseClaimsJws(authorization)
+                    .body
+                    .subject
         }
 
         throw AccessDeniedException(UNAUTHORIZED_ERROR_MESSAGE)

@@ -16,9 +16,10 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class JWTAuthenticationFilter(
-    private val authorizationUserService: AuthorizationUserService,
-    private val authManager: AuthenticationManager,
-    private val applicationInfo: ApplicationInfo
+        private val authorizationUserService: AuthorizationUserService,
+        private val authManager: AuthenticationManager,
+        private val authorizationHandler: AuthorizationHandler,
+        private val applicationInfo: ApplicationInfo
 ) : CustomAuthenticationProcessingFilter() {
 
     @Throws(AuthenticationException::class, IOException::class)
@@ -38,7 +39,8 @@ class JWTAuthenticationFilter(
         }
 
         httpServletResponse.status = HttpServletResponse.SC_UNAUTHORIZED
-        ResponseRegister.register(httpServletResponse)
+        ResponseRegister.register(httpServletRequest, httpServletResponse)
+        authorizationHandler.onAuthorizationFailed(httpServletRequest, httpServletResponse)
         return null
     }
 
@@ -59,7 +61,7 @@ class JWTAuthenticationFilter(
         val params: MutableMap<String, Any> = HashMap()
         params[JWT] = request.getAttribute(ACCESS_TOKEN)
         params[SUCCESS] = true
-        ResponseRegister.register(response, AUTHORIZATION_SUCCESSFUL, 200, params)
+        ResponseRegister.register(request, response, AUTHORIZATION_SUCCESSFUL, 200, params)
         authorizationUserService.successfulAuthentication(request, response, chain, authResult)
     }
 

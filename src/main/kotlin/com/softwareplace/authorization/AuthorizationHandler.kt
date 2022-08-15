@@ -9,4 +9,5 @@ interface AuthorizationHandler {
     fun userRole(): String
     fun authorizationSuccessfully(request: HttpServletRequest, userData: UserData)
     fun onAuthorizationFailed(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, exception: Exception)
+    fun onAuthorizationFailed(request: HttpServletRequest, response: HttpServletResponse)
 }

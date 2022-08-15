@@ -13,11 +13,11 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 
 open class CustomWebSecurityConfigurerAdapter(
-    private val userDetailsService: UserDetailsService,
-    private val authorizationUserService: AuthorizationUserService,
-    private val authorizationHandler: AuthorizationHandler,
-    private val applicationInfo: ApplicationInfo,
-    private val controllerAdvice: ControllerExceptionAdvice,
+        private val userDetailsService: UserDetailsService,
+        private val authorizationUserService: AuthorizationUserService,
+        private val authorizationHandler: AuthorizationHandler,
+        private val applicationInfo: ApplicationInfo,
+        private val controllerAdvice: ControllerExceptionAdvice,
 ) : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
@@ -28,20 +28,20 @@ open class CustomWebSecurityConfigurerAdapter(
         }
 
         http.cors().and().csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/**").hasRole(authorizationHandler.userRole()).and()
-            .exceptionHandling()
-            .authenticationEntryPoint(controllerAdvice)
-            .accessDeniedHandler(controllerAdvice)
-            .and()
-            .addFilterBefore(
-                JWTAuthenticationFilter(authorizationUserService, authenticationManager(), applicationInfo),
-                BasicAuthenticationFilter::class.java
-            )
-            .addFilterAfter(
-                CustomJWTAuthorizationFilter(authenticationManager(), authorizationUserService, authorizationHandler, applicationInfo),
-                BasicAuthenticationFilter::class.java
-            )
+                .authorizeRequests()
+                .antMatchers("/**").hasRole(authorizationHandler.userRole()).and()
+                .exceptionHandling()
+                .authenticationEntryPoint(controllerAdvice)
+                .accessDeniedHandler(controllerAdvice)
+                .and()
+                .addFilterBefore(
+                        JWTAuthenticationFilter(authorizationUserService, authenticationManager(), authorizationHandler, applicationInfo),
+                        BasicAuthenticationFilter::class.java
+                )
+                .addFilterAfter(
+                        CustomJWTAuthorizationFilter(authenticationManager(), authorizationUserService, authorizationHandler, applicationInfo),
+                        BasicAuthenticationFilter::class.java
+                )
     }
 
     @Throws(Exception::class)
