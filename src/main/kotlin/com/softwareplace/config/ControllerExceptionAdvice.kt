@@ -3,7 +3,7 @@ package com.softwareplace.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.exception.IllegalConstraintsException
 import com.softwareplace.json.logger.log.JsonLog
-import com.softwareplace.json.logger.log.loggerk
+import com.softwareplace.json.logger.log.kLogger
 import com.softwareplace.model.Response
 import org.apache.logging.log4j.Level
 import org.springframework.beans.ConversionNotSupportedException
@@ -187,7 +187,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     open fun serverError(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
         val logMessage = ex.message ?: "Failed to handle the request"
 
-        JsonLog(loggerk)
+        JsonLog(kLogger)
                 .message(logMessage)
                 .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .add("service", request.requestURI)
@@ -209,7 +209,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     open fun serverError(message: String? = null, status: HttpStatus, ex: Exception, headers: HttpHeaders, request: WebRequest): ResponseEntity<Any> {
         val logMessage = message ?: "Failed to handle the request"
 
-        JsonLog(loggerk)
+        JsonLog(kLogger)
                 .message(logMessage)
                 .add("status", status.value())
                 .add("date", LocalDateTime.now())
@@ -241,7 +241,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         val infoMap = hashMapOf<String, Any>("badRequest" to true)
         infoMap.putAll(ex.errors)
 
-        JsonLog(loggerk)
+        JsonLog(kLogger)
                 .message(ex.message ?: "Could not complete the request.")
                 .add("status", HttpStatus.BAD_REQUEST.value())
                 .add("service", request.requestURI)
@@ -260,7 +260,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
 
     open fun unauthorizedAccess(ex: Exception? = null, request: HttpServletRequest): ResponseEntity<Response> {
 
-        JsonLog(loggerk)
+        JsonLog(kLogger)
                 .message("Unauthorized access")
                 .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .add("service", request.requestURI)

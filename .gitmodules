@@ -1,0 +1,6 @@
+[submodule "spring-boot-included-builds"]
+	path = spring-boot-included-builds
+	url = https://github.com/eliasmeireles/spring-boot-included-builds.git
+[submodule "libs/json-logger"]
+	path = libs/json-logger
+	url = https://github.com/eliasmeireles/json-logger.git

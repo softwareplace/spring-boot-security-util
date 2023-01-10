@@ -1,10 +1,7 @@
 package com.softwareplace.extension
 
-import java.util.*
-
 
 fun String.addAtStartAsCamelCase(value: String): String {
-    val firstLetter = substring(0, 1)
-        .uppercase(Locale.getDefault())
+    val firstLetter = substring(0, 1).toUpperCase()
     return "$value$firstLetter${substring(1, length)}"
 }

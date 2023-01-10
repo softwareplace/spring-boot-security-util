@@ -6,5 +6,4 @@ local-publish:
 	./gradlew publishToMavenLocal
 
 test:
-	./init
 	./gradlew test
