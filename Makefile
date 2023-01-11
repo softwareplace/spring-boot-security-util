@@ -1,8 +1,8 @@
-init:
-	./init
+update:
+	git submodule update --recursive --init
+	git submodule update --recursive --remote
 
 local-publish:
-	./init
 	./gradlew publishToMavenLocal
 
 test:
