@@ -3,7 +3,9 @@ package com.softwareplace.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.exception.IllegalConstraintsException
 import com.softwareplace.json.logger.log.JsonLog
-import com.softwareplace.json.logger.log.kLogger
+import com.softwareplace.json.logger.log.logger
+
+
 import com.softwareplace.model.Response
 import org.apache.logging.log4j.Level
 import org.springframework.beans.ConversionNotSupportedException
@@ -42,64 +44,64 @@ import javax.servlet.http.HttpServletResponse
 open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessDeniedHandler, AuthenticationEntryPoint {
 
     override fun handleHttpRequestMethodNotSupported(
-            ex: HttpRequestMethodNotSupportedException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: HttpRequestMethodNotSupportedException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleHttpMediaTypeNotSupported(
-            ex: HttpMediaTypeNotSupportedException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: HttpMediaTypeNotSupportedException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleHttpMediaTypeNotAcceptable(
-            ex: HttpMediaTypeNotAcceptableException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: HttpMediaTypeNotAcceptableException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleMissingPathVariable(
-            ex: MissingPathVariableException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: MissingPathVariableException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleMissingServletRequestParameter(
-            ex: MissingServletRequestParameterException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: MissingServletRequestParameterException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleServletRequestBindingException(
-            ex: ServletRequestBindingException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: ServletRequestBindingException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleConversionNotSupported(
-            ex: ConversionNotSupportedException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: ConversionNotSupportedException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
@@ -109,37 +111,37 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     }
 
     override fun handleHttpMessageNotReadable(
-            ex: HttpMessageNotReadableException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: HttpMessageNotReadableException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleHttpMessageNotWritable(
-            ex: HttpMessageNotWritableException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: HttpMessageNotWritableException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleMethodArgumentNotValid(
-            ex: MethodArgumentNotValidException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: MethodArgumentNotValidException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleMissingServletRequestPart(
-            ex: MissingServletRequestPartException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: MissingServletRequestPartException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
@@ -149,19 +151,19 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     }
 
     override fun handleNoHandlerFoundException(
-            ex: NoHandlerFoundException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: NoHandlerFoundException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
 
     override fun handleAsyncRequestTimeoutException(
-            ex: AsyncRequestTimeoutException,
-            headers: HttpHeaders,
-            status: HttpStatus,
-            request: WebRequest
+        ex: AsyncRequestTimeoutException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
     ): ResponseEntity<Any> {
         return serverError(ex.message, status, ex, headers, request)
     }
@@ -187,42 +189,42 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     open fun serverError(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
         val logMessage = ex.message ?: "Failed to handle the request"
 
-        JsonLog(kLogger)
-                .message(logMessage)
-                .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .add("service", request.requestURI)
-                .add("date", LocalDateTime.now())
-                .error(ex)
-                .run(Level.ERROR)
+        JsonLog(logger())
+            .message(logMessage)
+            .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .add("service", request.requestURI)
+            .add("date", LocalDateTime.now())
+            .error(ex)
+            .run(Level.ERROR)
 
         return ResponseEntity(
-                Response(
-                        message = logMessage,
-                        info = mapOf(
-                                "service" to request.requestURI,
-                                "internalServerError" to true
-                        )
-                ), HttpStatus.INTERNAL_SERVER_ERROR
+            Response(
+                message = logMessage,
+                info = mapOf(
+                    "service" to request.requestURI,
+                    "internalServerError" to true
+                )
+            ), HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
 
     open fun serverError(message: String? = null, status: HttpStatus, ex: Exception, headers: HttpHeaders, request: WebRequest): ResponseEntity<Any> {
         val logMessage = message ?: "Failed to handle the request"
 
-        JsonLog(kLogger)
-                .message(logMessage)
-                .add("status", status.value())
-                .add("date", LocalDateTime.now())
-                .error(ex)
-                .run(Level.ERROR)
+        JsonLog(logger())
+            .message(logMessage)
+            .add("status", status.value())
+            .add("date", LocalDateTime.now())
+            .error(ex)
+            .run(Level.ERROR)
 
         return ResponseEntity(
-                Response(
-                        message = logMessage,
-                        info = mapOf(
-                                "internalServerError" to true,
-                        )
-                ), status
+            Response(
+                message = logMessage,
+                info = mapOf(
+                    "internalServerError" to true,
+                )
+            ), status
         )
     }
 
@@ -241,42 +243,42 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         val infoMap = hashMapOf<String, Any>("badRequest" to true)
         infoMap.putAll(ex.errors)
 
-        JsonLog(kLogger)
-                .message(ex.message ?: "Could not complete the request.")
-                .add("status", HttpStatus.BAD_REQUEST.value())
-                .add("service", request.requestURI)
-                .add("date", LocalDateTime.now())
-                .add("customProperties", infoMap)
-                .error(ex)
-                .run(Level.ERROR)
+        JsonLog(logger())
+            .message(ex.message ?: "Could not complete the request.")
+            .add("status", HttpStatus.BAD_REQUEST.value())
+            .add("service", request.requestURI)
+            .add("date", LocalDateTime.now())
+            .add("customProperties", infoMap)
+            .error(ex)
+            .run(Level.ERROR)
 
         return ResponseEntity(
-                Response(
-                        info = infoMap,
-                        message = ex.message ?: "Could not complete the request."
-                ), HttpStatus.BAD_REQUEST
+            Response(
+                info = infoMap,
+                message = ex.message ?: "Could not complete the request."
+            ), HttpStatus.BAD_REQUEST
         )
     }
 
     open fun unauthorizedAccess(ex: Exception? = null, request: HttpServletRequest): ResponseEntity<Response> {
 
-        JsonLog(kLogger)
-                .message("Unauthorized access")
-                .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .add("service", request.requestURI)
-                .add("date", LocalDateTime.now())
-                .error(ex)
-                .run(Level.ERROR)
+        JsonLog(logger())
+            .message("Unauthorized access")
+            .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .add("service", request.requestURI)
+            .add("date", LocalDateTime.now())
+            .error(ex)
+            .run(Level.ERROR)
 
 
         return ResponseEntity(
-                Response(
-                        message = "Unauthorized access",
-                        info = mapOf(
-                                "service" to request.requestURI,
-                                "unauthorizedAccess" to true
-                        )
-                ), HttpStatus.UNAUTHORIZED
+            Response(
+                message = "Unauthorized access",
+                info = mapOf(
+                    "service" to request.requestURI,
+                    "unauthorizedAccess" to true
+                )
+            ), HttpStatus.UNAUTHORIZED
         )
     }
 
