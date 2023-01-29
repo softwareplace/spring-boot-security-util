@@ -17,10 +17,23 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "com.softwareplace"
-            artifactId = "spring-boot-security-utils"
-            version = "1.0.0"
+            artifactId = "spring-boot-security-util"
+            version = "0.0.1"
 
             from(components["java"])
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["java"])
+                groupId = "com.github.eliasmeireles"
+                artifactId = "spring-boot-security-util"
+                version = "0.0.1"
+            }
         }
     }
 }
