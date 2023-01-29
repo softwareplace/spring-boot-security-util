@@ -6,15 +6,12 @@ plugins {
     id("build-source-project-plugin")
 }
 
-
-
 repositories {
     mavenCentral()
     mavenLocal()
     gradlePluginPortal()
     maven("https://jitpack.io")
 }
-
 
 publishing {
     publications {
