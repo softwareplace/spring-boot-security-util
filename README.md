@@ -39,3 +39,38 @@ security-util:
   jwtExpirationTime: (long) expiration
   securitySecret: secret key
 ```
+
+### Dependency setting
+
+- Gradle
+
+```kotlin
+repositories {
+    maven("https://jitpack.io")
+}
+```
+
+```kotlin
+implementation 'com.github.eliasmeireles:spring-boot-security-util:$spring-boot-security-util-version'
+```
+
+- Maven
+
+```xml
+
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+```xml
+
+<dependency>
+    <groupId>com.github.eliasmeireles</groupId>
+    <artifactId>spring-boot-security-util</artifactId>
+    <version>${spring-boot-security-util-version}</version>
+</dependency>
+```
