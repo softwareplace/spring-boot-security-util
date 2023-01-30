@@ -1,3 +1,8 @@
+import com.gradle.kts.build.source.jsonWebToken
+import com.gradle.kts.build.source.passay
+import com.gradle.kts.build.source.springSecurity
+import com.gradle.kts.build.source.test
+
 plugins {
     `maven-publish`
     `kotlin-dsl`
@@ -18,7 +23,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.softwareplace"
             artifactId = "spring-boot-security-util"
-            version = "0.0.1"
+            version = "0.0.2"
 
             from(components["java"])
         }
@@ -38,5 +43,11 @@ afterEvaluate {
     }
 }
 
+dependencies {
+    springSecurity()
+    jsonWebToken()
+    passay()
+    test()
+}
 group = "com.softwareplace"
 version = "1.0.0"
