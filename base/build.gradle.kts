@@ -18,12 +18,16 @@ repositories {
     maven("https://jitpack.io")
 }
 
+val currentVersion = "0.0.2"
+group = "com.softwareplace"
+version = currentVersion
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "com.softwareplace"
             artifactId = "spring-boot-security-util"
-            version = "0.0.2"
+            version = currentVersion
 
             from(components["java"])
         }
@@ -37,7 +41,7 @@ afterEvaluate {
                 from(components["java"])
                 groupId = "com.github.eliasmeireles"
                 artifactId = "spring-boot-security-util"
-                version = "0.0.1"
+                version = currentVersion
             }
         }
     }
@@ -49,5 +53,3 @@ dependencies {
     passay()
     test()
 }
-group = "com.softwareplace"
-version = "1.0.0"
