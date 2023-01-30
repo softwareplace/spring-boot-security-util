@@ -1,5 +1,4 @@
 rootProject.name = "spring-boot-security-util"
-include(":base")
 
 pluginManagement {
     repositories {
