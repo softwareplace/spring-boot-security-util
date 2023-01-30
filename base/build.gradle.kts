@@ -8,7 +8,6 @@ plugins {
     `kotlin-dsl`
     id("build-source-plugin")
     id("build-source-application-plugin")
-    id("build-source-project-plugin")
 }
 
 repositories {
