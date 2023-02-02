@@ -15,9 +15,7 @@ object ResponseRegister {
 
     @Throws(IOException::class)
     fun register(request: HttpServletRequest, response: HttpServletResponse) {
-        if (response.status == HttpServletResponse.SC_UNAUTHORIZED) {
-            register(request, response, "Access denied!", response.status, HashMap())
-        }
+        register(request, response, "Access denied!", response.status, HashMap())
     }
 
     @JvmStatic
@@ -42,6 +40,6 @@ object ResponseRegister {
             .add("service", request.requestURI)
             .add("date", LocalDateTime.now())
             .add("customProperties", logParams)
-            .run(Level.INFO)
+            .run(Level.ERROR)
     }
 }
