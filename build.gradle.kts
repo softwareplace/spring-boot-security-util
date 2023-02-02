@@ -17,7 +17,7 @@ repositories {
     maven("https://jitpack.io")
 }
 
-val currentVersion = "0.0.2"
+val currentVersion = "0.0.6"
 group = "com.softwareplace"
 version = currentVersion
 
