@@ -5,7 +5,7 @@ import com.softwareplace.exception.IllegalConstraintsException
 import com.softwareplace.json.logger.log.JsonLog
 import com.softwareplace.json.logger.log.logger
 import com.softwareplace.model.Response
-import org.apache.logging.log4j.Level
+import org.slf4j.event.Level
 import org.springframework.beans.ConversionNotSupportedException
 import org.springframework.beans.TypeMismatchException
 import org.springframework.http.HttpHeaders

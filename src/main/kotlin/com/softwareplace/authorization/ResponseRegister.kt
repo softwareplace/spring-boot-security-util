@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.authorization.JWTAuthenticationFilter.Companion.JWT
 import com.softwareplace.json.logger.log.JsonLog
 import com.softwareplace.json.logger.log.logger
-import org.apache.logging.log4j.Level
+import org.slf4j.event.Level
 import java.io.IOException
 import java.time.LocalDateTime
 import java.util.*
