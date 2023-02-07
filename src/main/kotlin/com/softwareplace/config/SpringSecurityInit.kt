@@ -9,10 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import javax.validation.Validator
 
 
-interface SpringSecurityUtilInitializer {
-
-    @Bean
-    fun applicationInf() = object : ApplicationInfo() {}
+interface SpringSecurityInit {
 
     @Bean
     fun validatorService(validator: Validator): ValidatorService {

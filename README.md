@@ -10,19 +10,20 @@
 
 - Required beans
 
-> [SpringSecurityUtilInitializer](security/src/main/kotlin/com/softwareplace/config/SpringSecurityUtilInitializer.kt)
+> [SpringSecurityInit](src/main/kotlin/com/softwareplace/config/SpringSecurityInit.kt)
 >
-> [ControllerExceptionAdvice](security/src/main/kotlin/com/softwareplace/config/ControllerExceptionAdvice.kt)
+> [ControllerExceptionAdvice](src/main/kotlin/com/softwareplace/config/ControllerExceptionAdvice.kt)
 >
-> [AuthorizationHandler](security/src/main/kotlin/com/softwareplace/authorization/AuthorizationHandler.kt)
+> [AuthorizationHandler](src/main/kotlin/com/softwareplace/authorization/AuthorizationHandler.kt)
 >
-> [AuthorizationUserService](security/src/main/kotlin/com/softwareplace/service/AuthorizationUserService.kt)
+> [AuthorizationUserService](src/main/kotlin/com/softwareplace/service/AuthorizationUserService.kt)
 >
 > [UserDetailsService](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetailsService.html)
 
 ```kotlin
 @SpringBootApplication
-class App : SpringSecurityUtilInitializer
+@EnableConfigurationProperties(value = [ApplicationInfo::class])
+class App : SpringSecurityInit
 
 fun main(args: Array<String>) {
     runApplication<App>(*args)
