@@ -22,8 +22,7 @@ open class CustomWebSecurityConfigurerAdapter(
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
-        val docUrl = applicationInfo.openUrl.split(",")
-        docUrl.forEach {
+        applicationInfo.openUrl.forEach {
             http.authorizeRequests().antMatchers("/**/$it/**").permitAll()
         }
 

@@ -1,39 +1,80 @@
 {
   "properties": [
     {
-      "name": "spring.security-util.name",
-      "type": "java.lang.String",
-      "sourceType": "com.softwareplace.config.ApplicationInfo",
-      "method": "name",
-      "description": "The spring.security-util name."
-    },
-    {
-      "name": "spring.security-util.version",
-      "type": "java.lang.String",
-      "sourceType": "com.softwareplace.config.ApplicationInfo",
-      "method": "version",
-      "description": "Current spring.security-util version"
-    },
-    {
       "name": "spring.security-util.openUrl",
-      "type": "java.lang.String",
+      "type": "java.util.List",
       "sourceType": "com.softwareplace.config.ApplicationInfo",
       "method": "openUrl",
-      "description": "Url that must not request authorization. Example -> login, authorization"
+      "description": "List of URLs that are open to access without authentication",
+      "defaultValue": [],
+      "deprecated": false
+    },
+    {
+      "name": "spring.security-util.allowedOrigins",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.softwareplace.config.ApplicationInfo",
+      "method": "allowedOrigins",
+      "description": "List of allowed origins in CORS requests",
+      "defaultValue": [
+        "*"
+      ],
+      "deprecated": false
+    },
+    {
+      "name": "spring.security-util.allowedMethods",
+      "sourceType": "com.softwareplace.config.ApplicationInfo",
+      "method": "allowedMethods",
+      "type": "java.util.List<java.lang.String>",
+      "description": "List of allowed methods in CORS requests",
+      "defaultValue": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS"
+      ],
+      "deprecated": false
+    },
+    {
+      "name": "spring.security-util.allowedHeaders",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.softwareplace.config.ApplicationInfo",
+      "method": "allowedHeaders",
+      "description": "List of allowed headers in CORS requests",
+      "defaultValue": [
+        "Access-Control-Allow-Headers",
+        "Authorization",
+        "Content-Type",
+        "authentication"
+      ],
+      "deprecated": false
     },
     {
       "name": "spring.security-util.jwtExpirationTime",
       "type": "java.lang.long",
       "sourceType": "com.softwareplace.config.ApplicationInfo",
       "method": "jwtExpirationTime",
-      "description": "The expiration time of the generate jwt. If not set, the default is 12 hours"
+      "description": "Expiration time for JWT tokens",
+      "defaultValue": 7776000000,
+      "deprecated": false
+    },
+    {
+      "name": "spring.security-util.corsConfigPattern",
+      "type": "java.lang.String",
+      "sourceType": "com.softwareplace.config.ApplicationInfo",
+      "method": "corsConfigPattern",
+      "description": "CORS configuration pattern",
+      "defaultValue": "/**",
+      "deprecated": false
     },
     {
       "name": "spring.security-util.securitySecret",
       "type": "java.lang.string",
       "sourceType": "com.softwareplace.config.ApplicationInfo",
       "method": "securitySecret",
-      "description": "Secret used to generate the jwt"
+      "description": "Security secret for the application",
+      "deprecated": false
     }
   ]
 }

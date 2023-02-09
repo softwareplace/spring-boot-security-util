@@ -19,13 +19,6 @@ open class CustomJWTAuthorizationFilter(
     }
 
     open fun openUrl(requestPath: String): Boolean {
-        val split = applicationInfo.openUrl.split(",")
-
-        for (path in split) {
-            if (requestPath.contains(path)) {
-                return true
-            }
-        }
-        return false
+        return applicationInfo.openUrl.any(requestPath::contains)
     }
 }
