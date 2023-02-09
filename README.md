@@ -33,12 +33,21 @@ fun main(args: Array<String>) {
 `application.yaml`
 
 ```yaml
-security-util:
-  name: project.name
-  version: project.version
-  openUrl: example -> health,docs
-  jwtExpirationTime: (long) expiration
-  securitySecret: secret key
+spring:
+  security-util:
+    jwtExpirationTime: ${ENV_SP_JWT_EXPIRATION_TIME}
+    securitySecret: ${ENV_SECURITY_SECRET}
+    allowedOrigins:
+      - http://localhost:8080
+    openUrl:
+      - swagger-ui.html
+      - swagger-config
+      - authorization
+      - swagger-ui
+      - v3/api-docs
+      - favicon.ico
+      - webjars
+      - swagger
 ```
 
 ### Dependency setting
