@@ -4,25 +4,9 @@ import com.gradle.kts.build.source.springSecurity
 import com.gradle.kts.build.source.test
 
 plugins {
-    val kotlinVersion = "1.7.22"
     `maven-publish`
-    kotlin("jvm") version kotlinVersion
+    kotlin("jvm") version System.getProperty("kotlinVersion")
     id("build-source-plugin")
-    id("build-source-application-plugin")
-}
-
-repositories {
-    mavenCentral()
-    mavenLocal()
-    gradlePluginPortal()
-    maven("https://jitpack.io")
-}
-
-kotlin {
-    jvmToolchain {
-        this.languageVersion.set(JavaLanguageVersion.of(11))
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
 }
 
 val currentVersion = "0.0.9"
