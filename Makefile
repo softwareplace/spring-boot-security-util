@@ -3,7 +3,7 @@ update:
 	git submodule update --recursive --remote
 
 local-publish:
-	./gradlew publishToMavenLocal
+	./gradlew clean -Pgroup=com.github.eliasmeireles -xtest assemble publishToMavenLocal
 
 test:
 	./gradlew test
