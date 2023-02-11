@@ -7,7 +7,6 @@ plugins {
     `maven-publish`
     kotlin("jvm") version System.getProperty("kotlinVersion")
     id("build-source-plugin")
-    id("build-configuration-plugin")
 }
 
 val currentVersion = "0.0.10"
