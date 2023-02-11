@@ -10,9 +10,13 @@ plugins {
     id("build-submodule-source-plugin")
 }
 
-val currentVersion = "0.0.13-SNAPSHOT"
+val currentVersion = "0.0.13"
 group = "com.softwareplace"
 version = currentVersion
+
+tasks.getByName<Jar>("jar") {
+    archiveClassifier.set("")
+}
 
 publishing {
     publications {
