@@ -7,6 +7,7 @@ import com.softwareplace.service.AuthorizationUserService
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureException
+import org.slf4j.event.Level
 import org.springframework.http.HttpHeaders
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.AuthenticationManager
@@ -39,10 +40,11 @@ open class JWTAuthorizationFilter(
                 is AccessDeniedException,
                 is MalformedJwtException -> {
                     response.status = HttpServletResponse.SC_UNAUTHORIZED
-                    register(request, response)
+                    register(request, response).level(Level.ERROR).run()
                 }
 
                 else -> register(request, response, ERROR_RESPONSE_MESSAGE, HttpServletResponse.SC_BAD_REQUEST, HashMap())
+                    .level(Level.ERROR).run()
             }
 
             authorizationHandler.onAuthorizationFailed(request, response, chain, exception)

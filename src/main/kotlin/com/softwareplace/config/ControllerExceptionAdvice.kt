@@ -2,8 +2,7 @@ package com.softwareplace.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.exception.IllegalConstraintsException
-import com.softwareplace.json.logger.log.JsonLog
-import com.softwareplace.json.logger.log.logger
+import com.softwareplace.json.logger.log.jsonLog
 import com.softwareplace.model.Response
 import org.slf4j.event.Level
 import org.springframework.beans.ConversionNotSupportedException
@@ -38,6 +37,7 @@ import java.util.*
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import com.softwareplace.json.logger.log.logger as log
 
 open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessDeniedHandler, AuthenticationEntryPoint {
 
@@ -187,13 +187,11 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     open fun serverError(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
         val logMessage = ex.message ?: "Failed to handle the request"
 
-        JsonLog(logger())
-            .message(logMessage)
+        getLogger(ex, request)
             .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
             .add("service", request.requestURI)
             .add("date", LocalDateTime.now())
-            .error(ex)
-            .run(Level.ERROR)
+            .run()
 
         return ResponseEntity(
             Response(
@@ -209,12 +207,11 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     open fun serverError(message: String? = null, status: HttpStatus, ex: Exception, headers: HttpHeaders, request: WebRequest): ResponseEntity<Any> {
         val logMessage = message ?: "Failed to handle the request"
 
-        JsonLog(logger())
+        getLogger(ex)
             .message(logMessage)
             .add("status", status.value())
             .add("date", LocalDateTime.now())
-            .error(ex)
-            .run(Level.ERROR)
+            .run()
 
         return ResponseEntity(
             Response(
@@ -240,15 +237,12 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     fun constraintViolationException(request: HttpServletRequest, ex: IllegalConstraintsException): ResponseEntity<*> {
         val infoMap = hashMapOf<String, Any>("badRequest" to true)
         infoMap.putAll(ex.errors)
-
-        JsonLog(logger())
+        getLogger(ex, request)
             .message(ex.message ?: "Could not complete the request.")
-            .add("status", HttpStatus.BAD_REQUEST.value())
-            .add("service", request.requestURI)
             .add("date", LocalDateTime.now())
             .add("customProperties", infoMap)
-            .error(ex)
-            .run(Level.ERROR)
+            .run()
+
 
         return ResponseEntity(
             Response(
@@ -258,15 +252,14 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         )
     }
 
-    open fun unauthorizedAccess(ex: Exception? = null, request: HttpServletRequest): ResponseEntity<Response> {
 
-        JsonLog(logger())
+    open fun unauthorizedAccess(ex: Exception? = null, request: HttpServletRequest): ResponseEntity<Response> {
+        getLogger(ex, request)
             .message("Unauthorized access")
             .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
             .add("service", request.requestURI)
             .add("date", LocalDateTime.now())
-            .error(ex)
-            .run(Level.ERROR)
+            .run()
 
 
         return ResponseEntity(
@@ -294,4 +287,20 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         val mapper = ObjectMapper()
         mapper.writeValue(response.outputStream, mapBodyException)
     }
+
+    open fun getLogger(
+        ex: Throwable?,
+        request: HttpServletRequest
+    ) = log.jsonLog
+        .error(ex)
+        .level(Level.ERROR)
+        .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
+        .add("service", request.requestURI)
+
+    open fun getLogger(
+        ex: Throwable?
+    ) = log.jsonLog
+        .error(ex)
+        .level(Level.ERROR)
+        .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
 }

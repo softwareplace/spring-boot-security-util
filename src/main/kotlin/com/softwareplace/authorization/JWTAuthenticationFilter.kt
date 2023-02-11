@@ -6,6 +6,7 @@ import com.softwareplace.config.ApplicationInfo
 import com.softwareplace.encrypt.Encrypt
 import com.softwareplace.model.RequestUser
 import com.softwareplace.service.AuthorizationUserService
+import org.slf4j.event.Level
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -39,7 +40,7 @@ class JWTAuthenticationFilter(
         }
 
         httpServletResponse.status = HttpServletResponse.SC_UNAUTHORIZED
-        ResponseRegister.register(httpServletRequest, httpServletResponse)
+        ResponseRegister.register(httpServletRequest, httpServletResponse).level(Level.ERROR).run()
         authorizationHandler.onAuthorizationFailed(httpServletRequest, httpServletResponse)
         return null
     }
@@ -61,7 +62,7 @@ class JWTAuthenticationFilter(
         val params: MutableMap<String, Any> = HashMap()
         params[JWT] = request.getAttribute(ACCESS_TOKEN)
         params[SUCCESS] = true
-        ResponseRegister.register(request, response, AUTHORIZATION_SUCCESSFUL, 200, params)
+        ResponseRegister.register(request, response, AUTHORIZATION_SUCCESSFUL, 200, params).level(Level.INFO).run()
         authorizationUserService.successfulAuthentication(request, response, chain, authResult)
     }
 

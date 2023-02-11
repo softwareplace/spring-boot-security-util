@@ -7,6 +7,7 @@ pluginManagement {
         maven("https://jitpack.io")
     }
 }
+
 buildscript {
     System.setProperty("springBootVersion", "2.7.2")
     System.setProperty("kotlinVersion", "1.6.21")

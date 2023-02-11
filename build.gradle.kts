@@ -7,9 +7,10 @@ plugins {
     `maven-publish`
     kotlin("jvm") version System.getProperty("kotlinVersion")
     id("build-source-plugin")
+    id("build-configuration-plugin")
 }
 
-val currentVersion = "0.0.9"
+val currentVersion = "0.0.10"
 group = "com.softwareplace"
 version = currentVersion
 
@@ -37,7 +38,6 @@ afterEvaluate {
         }
     }
 }
-
 
 dependencies {
     springSecurity()
