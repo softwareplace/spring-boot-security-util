@@ -7,9 +7,10 @@ plugins {
     `maven-publish`
     kotlin("jvm") version System.getProperty("kotlinVersion")
     id("build-source-plugin")
+    id("build-submodule-source-plugin")
 }
 
-val currentVersion = "0.0.10"
+val currentVersion = "0.0.12"
 group = "com.softwareplace"
 version = currentVersion
 
