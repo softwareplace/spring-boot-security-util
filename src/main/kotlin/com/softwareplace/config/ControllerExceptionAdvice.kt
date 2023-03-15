@@ -8,8 +8,6 @@ import com.softwareplace.model.Response
 import org.slf4j.event.Level
 import org.springframework.beans.ConversionNotSupportedException
 import org.springframework.beans.TypeMismatchException
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -29,10 +27,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingPathVariableException
 import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.ServletRequestBindingException
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException
 import org.springframework.web.multipart.support.MissingServletRequestPartException
@@ -45,11 +40,8 @@ import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
-@RestControllerAdvice
-@ControllerAdvice(annotations = [RestController::class])
 class ControllerExceptionAdvice(
-    val mapper: ObjectMapper
+    private val mapper: ObjectMapper
 ) : ResponseEntityExceptionHandler(), AccessDeniedHandler, AuthenticationEntryPoint {
 
 

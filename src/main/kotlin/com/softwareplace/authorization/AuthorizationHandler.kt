@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 interface AuthorizationHandler {
+
     fun userConfig(): List<Pair<String, List<String>>>
     fun authorizationSuccessfully(request: HttpServletRequest, userData: UserData)
     fun onAuthorizationFailed(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, exception: Exception)

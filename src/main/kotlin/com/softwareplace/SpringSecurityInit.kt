@@ -1,8 +1,6 @@
 package com.softwareplace
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.config.ApplicationInfo
-import com.softwareplace.config.ControllerExceptionAdvice
 import com.softwareplace.config.CustomCorsConfiguration
 import com.softwareplace.security.adapter.CustomWebSecurityConfigurerAdapter
 import com.softwareplace.service.ValidatorService
@@ -26,7 +24,4 @@ class SpringSecurityInit {
     fun validatorService(validator: Validator): ValidatorService {
         return ValidatorService(validator)
     }
-
-    @Bean
-    fun controllerExceptionAdvice(mapper: ObjectMapper) = ControllerExceptionAdvice(mapper)
 }

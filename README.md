@@ -30,6 +30,15 @@ fun main(args: Array<String>) {
 }
 ```
 
+- Controller Advisor
+
+```kotlin
+@Order(Ordered.HIGHEST_PRECEDENCE)
+@RestControllerAdvice
+@ControllerAdvice(annotations = [RestController::class])
+class ControllerAdviceImpl(mapper: ObjectMapper) : ControllerExceptionAdvice(mapper)
+```
+
 `application.yaml`
 
 ```yaml

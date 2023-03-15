@@ -1,12 +1,15 @@
 package com.softwareplace
 
 import com.softwareplace.authorization.AuthorizationHandler
+import com.softwareplace.config.ControllerExceptionAdvice
+import com.softwareplace.json.logger.mapper.getObjectMapper
 import com.softwareplace.model.RequestUser
 import com.softwareplace.model.UserData
 import com.softwareplace.service.AuthorizationUserService
 import com.softwareplace.service.ValidatorService
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Primary
 import org.springframework.security.core.userdetails.UserDetailsService
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
@@ -50,9 +53,7 @@ class App {
         }
     }
 
-//    @Bean
-//    fun controllerAdvice() = object : ControllerExceptionAdvice(getObjectMapper()) {}
-
     @Bean
-    fun validatorService(validator: Validator) = ValidatorService(validator)
+    @Primary
+    fun controllerAdvice() = ControllerExceptionAdvice(getObjectMapper())
 }
