@@ -40,7 +40,7 @@ import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class ControllerExceptionAdvice(
+open class ControllerExceptionAdvice(
     private val mapper: ObjectMapper
 ) : ResponseEntityExceptionHandler(), AccessDeniedHandler, AuthenticationEntryPoint {
 
@@ -184,11 +184,11 @@ class ControllerExceptionAdvice(
     }
 
     @ExceptionHandler(Exception::class)
-    fun defaultErrorHandler(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
+    open fun defaultErrorHandler(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
         return serverError(request, response, ex)
     }
 
-    fun serverError(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
+    open fun serverError(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
         val logMessage = ex.message ?: "Failed to handle the request"
         getLogger(ex, request)
             .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -207,7 +207,7 @@ class ControllerExceptionAdvice(
         )
     }
 
-    fun serverError(message: String? = null, status: HttpStatus, ex: Exception, headers: HttpHeaders, request: WebRequest): ResponseEntity<Any> {
+    open fun serverError(message: String? = null, status: HttpStatus, ex: Exception, headers: HttpHeaders, request: WebRequest): ResponseEntity<Any> {
         val logMessage = message ?: "Failed to handle the request"
         getLogger(ex)
             .message(logMessage)
@@ -226,17 +226,17 @@ class ControllerExceptionAdvice(
     }
 
     @ExceptionHandler(AccessDeniedException::class)
-    fun handleAccessDeniedException(response: HttpServletRequest, request: HttpServletRequest): ResponseEntity<*> {
+    open fun handleAccessDeniedException(response: HttpServletRequest, request: HttpServletRequest): ResponseEntity<*> {
         return unauthorizedAccess(request = request)
     }
 
     @ExceptionHandler(AuthenticationCredentialsNotFoundException::class)
-    fun handleAccessDeniedExceptionAuthentication(request: HttpServletRequest, ex: AuthenticationCredentialsNotFoundException): ResponseEntity<*> {
+    open fun handleAccessDeniedExceptionAuthentication(request: HttpServletRequest, ex: AuthenticationCredentialsNotFoundException): ResponseEntity<*> {
         return unauthorizedAccess(ex, request)
     }
 
     @ExceptionHandler(IllegalConstraintsException::class)
-    fun constraintViolationException(request: HttpServletRequest, response: HttpServletResponse, ex: IllegalConstraintsException): ResponseEntity<*> {
+    open fun constraintViolationException(request: HttpServletRequest, response: HttpServletResponse, ex: IllegalConstraintsException): ResponseEntity<*> {
         val infoMap = hashMapOf<String, Any>("badRequest" to true)
         infoMap.putAll(ex.errors)
         getLogger(ex, request)
@@ -254,7 +254,7 @@ class ControllerExceptionAdvice(
         )
     }
 
-    fun unauthorizedAccess(ex: Exception? = null, request: HttpServletRequest): ResponseEntity<Response> {
+    open fun unauthorizedAccess(ex: Exception? = null, request: HttpServletRequest): ResponseEntity<Response> {
         getLogger(ex, request)
             .message("Unauthorized access")
             .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -273,7 +273,7 @@ class ControllerExceptionAdvice(
         )
     }
 
-    fun accessDeniedRegister(request: HttpServletRequest, response: HttpServletResponse, ex: Throwable) {
+    open fun accessDeniedRegister(request: HttpServletRequest, response: HttpServletResponse, ex: Throwable) {
         val mapBodyException = HashMap<String, Any>()
         mapBodyException["message"] = "Access denied"
         mapBodyException["timestamp"] = Date().time
@@ -295,12 +295,12 @@ class ControllerExceptionAdvice(
         mapper.writeValue(response.outputStream, mapBodyException)
     }
 
-    private fun getErrorMessage(ex: Throwable): String = when (ex.message) {
+    open fun getErrorMessage(ex: Throwable): String = when (ex.message) {
         null -> "Access denied"
         else -> ex.message!!
     }
 
-    fun getLogger(
+    open fun getLogger(
         ex: Throwable?,
         request: HttpServletRequest
     ) = JsonLog(kLogger)
@@ -310,7 +310,7 @@ class ControllerExceptionAdvice(
         .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
         .add("service", request.requestURI)
 
-    fun getLogger(
+    open fun getLogger(
         ex: Throwable?
     ) = JsonLog(kLogger)
         .error(ex)
