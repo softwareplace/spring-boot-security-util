@@ -10,7 +10,7 @@ plugins {
     id("build-submodule-source-plugin")
 }
 
-val currentVersion = "0.0.13"
+val currentVersion = "0.0.14"
 group = "com.softwareplace"
 version = currentVersion
 

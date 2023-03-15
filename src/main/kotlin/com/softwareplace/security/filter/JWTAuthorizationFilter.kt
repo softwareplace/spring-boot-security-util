@@ -1,7 +1,9 @@
-package com.softwareplace.authorization
+package com.softwareplace.security.filter
 
-import com.softwareplace.authorization.ResponseRegister.register
+import com.softwareplace.authorization.AuthorizationHandler
+import com.softwareplace.authorization.ResponseRegister
 import com.softwareplace.config.ApplicationInfo
+import com.softwareplace.extension.asPathRegex
 import com.softwareplace.model.toAuthorizationUser
 import com.softwareplace.service.AuthorizationUserService
 import io.jsonwebtoken.Jwts
@@ -10,40 +12,50 @@ import io.jsonwebtoken.SignatureException
 import org.slf4j.event.Level
 import org.springframework.http.HttpHeaders
 import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
-import org.springframework.web.client.HttpClientErrorException.Unauthorized
-import java.io.IOException
+import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.filter.OncePerRequestFilter
+import java.util.*
 import javax.servlet.FilterChain
-import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-open class JWTAuthorizationFilter(
-    authenticationManager: AuthenticationManager?,
+class JWTAuthorizationFilter(
     private val authorizationUserService: AuthorizationUserService,
     private val authorizationHandler: AuthorizationHandler,
     private val applicationInfo: ApplicationInfo
-) : BasicAuthenticationFilter(authenticationManager) {
+) : OncePerRequestFilter() {
 
-    @Throws(IOException::class, ServletException::class)
+    private fun isOpenUrl(requestPath: String): Boolean {
+        return applicationInfo.openUrl.any { pathPattern -> requestPath.matches(pathPattern.asPathRegex()) }
+    }
+
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        return isOpenUrl(request.servletPath)
+    }
+
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         try {
             SecurityContextHolder.getContext().authentication = getUsernamePasswordAuthenticationToken(request)
             chain.doFilter(request, response)
         } catch (exception: Exception) {
             when (exception) {
-                is Unauthorized,
+                is HttpClientErrorException.Unauthorized,
                 is SignatureException,
                 is AccessDeniedException,
                 is MalformedJwtException -> {
                     response.status = HttpServletResponse.SC_UNAUTHORIZED
-                    register(request, response).level(Level.ERROR).run()
+                    ResponseRegister.register(request, response).level(Level.ERROR).run()
                 }
 
-                else -> register(request, response, ERROR_RESPONSE_MESSAGE, HttpServletResponse.SC_BAD_REQUEST, HashMap())
+                else -> ResponseRegister.register(
+                    request,
+                    response,
+                    ERROR_RESPONSE_MESSAGE,
+                    HttpServletResponse.SC_BAD_REQUEST,
+                    HashMap()
+                )
                     .level(Level.ERROR).run()
             }
 
@@ -56,9 +68,9 @@ open class JWTAuthorizationFilter(
         val userData = authorizationUserService.findUser(authToken)
 
         userData?.run {
-            authorizationHandler.authorizationSuccessfully(request, userData)
-            request.setAttribute(USER_SESSION_DATA, userData)
-            return UsernamePasswordAuthenticationToken(toAuthorizationUser, null, toAuthorizationUser.authorities)
+            authorizationHandler.authorizationSuccessfully(request, this)
+            request.setAttribute(USER_SESSION_DATA, this)
+            return UsernamePasswordAuthenticationToken(this.toAuthorizationUser, null, this.toAuthorizationUser.authorities)
         }
 
         throw AccessDeniedException(UNAUTHORIZED_ERROR_MESSAGE)
@@ -69,8 +81,12 @@ open class JWTAuthorizationFilter(
         val requestHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
 
         requestHeader?.run {
-            val authorization = this
-                .replace(BEARER, "")
+            if (this.startsWith(BASIC)) {
+                val header = replace("Basic ", "")
+                return String(Base64.getDecoder().decode(header))
+            }
+
+            val authorization = replace(BEARER, "")
 
             return Jwts.parser()
                 .setSigningKey(applicationInfo.securitySecret)
@@ -84,6 +100,7 @@ open class JWTAuthorizationFilter(
 
     companion object {
         const val BEARER = "Bearer "
+        const val BASIC = "Basic "
         const val UNAUTHORIZED_ERROR_MESSAGE = "Access was not authorized on this request."
         const val ROLE = "ROLE_"
         const val ERROR_RESPONSE_MESSAGE = "The request could not be completed."

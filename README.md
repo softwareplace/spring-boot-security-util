@@ -10,7 +10,7 @@
 
 - Required beans
 
-> [SpringSecurityInit](src/main/kotlin/com/softwareplace/config/SpringSecurityInit.kt)
+> [SpringSecurityInit](src/main/kotlin/com/softwareplace/SpringSecurityInit.kt)
 >
 > [ControllerExceptionAdvice](src/main/kotlin/com/softwareplace/config/ControllerExceptionAdvice.kt)
 >
@@ -22,8 +22,8 @@
 
 ```kotlin
 @SpringBootApplication
-@EnableConfigurationProperties(value = [ApplicationInfo::class])
-class App : SpringSecurityInit
+@ImportAutoConfiguration(classes = [SpringSecurityInit::class])
+class App
 
 fun main(args: Array<String>) {
     runApplication<App>(*args)
@@ -35,19 +35,27 @@ fun main(args: Array<String>) {
 ```yaml
 spring:
   security-util:
-    jwtExpirationTime: ${ENV_SP_JWT_EXPIRATION_TIME}
+    jwtExpirationTime: ${ENV_JWT_EXPIRATION_TIME}
     securitySecret: ${ENV_SECURITY_SECRET}
-    allowedOrigins:
-      - http://localhost:8080
     openUrl:
-      - swagger-ui.html
-      - swagger-config
-      - authorization
-      - swagger-ui
-      - v3/api-docs
-      - favicon.ico
-      - webjars
-      - swagger
+      - "/swagger-resources/**"
+      - "/swagger-ui.html/**"
+      - "/swagger-config/**"
+      - "/source-handler/**"
+      - "/authorization"
+      - "/swagger-ui/**"
+      - "/favicon.ico/**"
+      - "/v3/api-docs/**"
+      - "/v3/api-docs"
+      - "/webjars/**"
+      - "/swagger/**"
+      - "/v1/lights"
+      - "/v1/listener"
+      - "/health/**"
+      - "/assets/**"
+      - "/error/**"
+      - "/csrf/**"
+      - "/docs/**"
 ```
 
 ### Dependency setting

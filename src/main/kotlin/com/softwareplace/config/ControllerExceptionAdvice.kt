@@ -2,13 +2,17 @@ package com.softwareplace.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.exception.IllegalConstraintsException
-import com.softwareplace.json.logger.log.jsonLog
+import com.softwareplace.json.logger.log.JsonLog
+import com.softwareplace.json.logger.log.kLogger
 import com.softwareplace.model.Response
 import org.slf4j.event.Level
 import org.springframework.beans.ConversionNotSupportedException
 import org.springframework.beans.TypeMismatchException
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.http.converter.HttpMessageNotWritableException
@@ -25,7 +29,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingPathVariableException
 import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.ServletRequestBindingException
+import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException
 import org.springframework.web.multipart.support.MissingServletRequestPartException
@@ -37,9 +44,14 @@ import java.util.*
 import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import com.softwareplace.json.logger.log.logger as log
 
-open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessDeniedHandler, AuthenticationEntryPoint {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+@RestControllerAdvice
+@ControllerAdvice(annotations = [RestController::class])
+class ControllerExceptionAdvice(
+    val mapper: ObjectMapper
+) : ResponseEntityExceptionHandler(), AccessDeniedHandler, AuthenticationEntryPoint {
+
 
     override fun handleHttpRequestMethodNotSupported(
         ex: HttpRequestMethodNotSupportedException,
@@ -171,12 +183,12 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     }
 
     override fun handle(request: HttpServletRequest, response: HttpServletResponse, ex: AccessDeniedException) {
-        accessDeniedRegister(request, response)
+        accessDeniedRegister(request, response, ex)
     }
 
     @Throws(IOException::class, ServletException::class)
     override fun commence(request: HttpServletRequest, response: HttpServletResponse, authenticationException: AuthenticationException) {
-        accessDeniedRegister(request, response)
+        accessDeniedRegister(request, response, authenticationException)
     }
 
     @ExceptionHandler(Exception::class)
@@ -184,9 +196,8 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         return serverError(request, response, ex)
     }
 
-    open fun serverError(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
+    fun serverError(request: HttpServletRequest, response: HttpServletResponse, ex: Exception): ResponseEntity<Response> {
         val logMessage = ex.message ?: "Failed to handle the request"
-
         getLogger(ex, request)
             .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
             .add("service", request.requestURI)
@@ -204,9 +215,8 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         )
     }
 
-    open fun serverError(message: String? = null, status: HttpStatus, ex: Exception, headers: HttpHeaders, request: WebRequest): ResponseEntity<Any> {
+    fun serverError(message: String? = null, status: HttpStatus, ex: Exception, headers: HttpHeaders, request: WebRequest): ResponseEntity<Any> {
         val logMessage = message ?: "Failed to handle the request"
-
         getLogger(ex)
             .message(logMessage)
             .add("status", status.value())
@@ -224,17 +234,17 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
     }
 
     @ExceptionHandler(AccessDeniedException::class)
-    open fun handleAccessDeniedException(response: HttpServletRequest, request: HttpServletRequest): ResponseEntity<*> {
+    fun handleAccessDeniedException(response: HttpServletRequest, request: HttpServletRequest): ResponseEntity<*> {
         return unauthorizedAccess(request = request)
     }
 
     @ExceptionHandler(AuthenticationCredentialsNotFoundException::class)
-    open fun handleAccessDeniedExceptionAuthentication(request: HttpServletRequest, ex: AuthenticationCredentialsNotFoundException): ResponseEntity<*> {
+    fun handleAccessDeniedExceptionAuthentication(request: HttpServletRequest, ex: AuthenticationCredentialsNotFoundException): ResponseEntity<*> {
         return unauthorizedAccess(ex, request)
     }
 
     @ExceptionHandler(IllegalConstraintsException::class)
-    fun constraintViolationException(request: HttpServletRequest, ex: IllegalConstraintsException): ResponseEntity<*> {
+    fun constraintViolationException(request: HttpServletRequest, response: HttpServletResponse, ex: IllegalConstraintsException): ResponseEntity<*> {
         val infoMap = hashMapOf<String, Any>("badRequest" to true)
         infoMap.putAll(ex.errors)
         getLogger(ex, request)
@@ -252,15 +262,13 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         )
     }
 
-
-    open fun unauthorizedAccess(ex: Exception? = null, request: HttpServletRequest): ResponseEntity<Response> {
+    fun unauthorizedAccess(ex: Exception? = null, request: HttpServletRequest): ResponseEntity<Response> {
         getLogger(ex, request)
             .message("Unauthorized access")
             .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
             .add("service", request.requestURI)
             .add("date", LocalDateTime.now())
             .run()
-
 
         return ResponseEntity(
             Response(
@@ -273,7 +281,7 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         )
     }
 
-    open fun accessDeniedRegister(request: HttpServletRequest, response: HttpServletResponse) {
+    fun accessDeniedRegister(request: HttpServletRequest, response: HttpServletResponse, ex: Throwable) {
         val mapBodyException = HashMap<String, Any>()
         mapBodyException["message"] = "Access denied"
         mapBodyException["timestamp"] = Date().time
@@ -281,26 +289,40 @@ open class ControllerExceptionAdvice : ResponseEntityExceptionHandler(), AccessD
         mapBodyException["service"] = request.requestURI
         mapBodyException["code"] = HttpServletResponse.SC_UNAUTHORIZED
 
-        response.contentType = "application/json"
+        response.contentType = MediaType.APPLICATION_JSON_VALUE
         response.status = HttpServletResponse.SC_UNAUTHORIZED
 
-        val mapper = ObjectMapper()
+        getLogger(ex, request)
+            .add("status", response.status)
+            .error(ex)
+            .message(getErrorMessage(ex))
+            .add("service", request.requestURI)
+            .add("date", LocalDateTime.now())
+            .run()
+
         mapper.writeValue(response.outputStream, mapBodyException)
     }
 
-    open fun getLogger(
+    private fun getErrorMessage(ex: Throwable): String = when (ex.message) {
+        null -> "Access denied"
+        else -> ex.message!!
+    }
+
+    fun getLogger(
         ex: Throwable?,
         request: HttpServletRequest
-    ) = log.jsonLog
+    ) = JsonLog(kLogger)
         .error(ex)
         .level(Level.ERROR)
+        .printStackTracker(true)
         .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
         .add("service", request.requestURI)
 
-    open fun getLogger(
+    fun getLogger(
         ex: Throwable?
-    ) = log.jsonLog
+    ) = JsonLog(kLogger)
         .error(ex)
         .level(Level.ERROR)
+        .printStackTracker(true)
         .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
 }

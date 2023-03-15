@@ -1,6 +1,6 @@
 package com.softwareplace.model
 
-import com.softwareplace.authorization.JWTAuthorizationFilter
+import com.softwareplace.security.filter.JWTAuthorizationFilter
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
