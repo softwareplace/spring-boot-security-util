@@ -1,18 +1,6 @@
 rootProject.name = "spring-boot-security-util"
 
-pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-        maven("https://jitpack.io")
-    }
-}
+apply(from = "spring-boot-included-builds/libs.settings.gradle.kts")
+apply(from = "spring-boot-included-builds/included.build.settings.gradle.kts")
 
-buildscript {
-    System.setProperty("springBootVersion", "2.7.2")
-    System.setProperty("kotlinVersion", "1.6.21")
-    System.setProperty("springDependencyManagementVersion", "1.0.11.RELEASE")
-}
 
-includeBuild("spring-boot-included-builds/build-configuration")
-includeBuild("spring-boot-included-builds/build-source")

@@ -1,7 +1,4 @@
-import com.gradle.kts.build.source.jsonWebToken
-import com.gradle.kts.build.source.passay
-import com.gradle.kts.build.source.springSecurity
-import com.gradle.kts.build.source.test
+import com.gradle.kts.build.source.*
 
 plugins {
     `maven-publish`
@@ -10,8 +7,9 @@ plugins {
     id("build-submodule-source-plugin")
 }
 
-val currentVersion = "0.0.15"
-group = "com.softwareplace"
+val currentVersion = "0.0.16"
+val appGroup = "com.softwareplace.springsecurity"
+group = appGroup
 version = currentVersion
 
 tasks.getByName<Jar>("jar") {
@@ -21,7 +19,7 @@ tasks.getByName<Jar>("jar") {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.softwareplace"
+            groupId = appGroup
             artifactId = "spring-boot-security-util"
             version = currentVersion
 
@@ -44,8 +42,11 @@ afterEvaluate {
 }
 
 dependencies {
+    springConfigurationProcessor()
     springSecurity()
     jsonWebToken()
+    jsonLogger()
+    springDoc()
     passay()
     test()
 }

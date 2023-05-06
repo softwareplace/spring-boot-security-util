@@ -1,7 +1,8 @@
 package com.softwareplace.service
 
-import com.softwareplace.exception.IllegalConstraintsException
-import com.softwareplace.validator.ValidPassword
+import com.softwareplace.springsecurity.exception.IllegalConstraintsException
+import com.softwareplace.springsecurity.service.ValidatorService
+import com.softwareplace.springsecurity.validator.ValidPassword
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource

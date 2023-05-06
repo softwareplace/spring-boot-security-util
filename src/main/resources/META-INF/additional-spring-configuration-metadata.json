@@ -1,0 +1,73 @@
+{
+  "properties": [
+    {
+      "name": "spring.security.openUrl",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "openUrl",
+      "description": "List of URLs that are open to access without authentication.",
+      "defaultValue": []
+    },
+    {
+      "name": "spring.security.allowedOrigins",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "allowedOrigins",
+      "description": "List of allowed origins in CORS requests.",
+      "defaultValue": [
+        "*"
+      ]
+    },
+    {
+      "name": "spring.security.allowedMethods",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "allowedMethods",
+      "type": "java.util.List<java.lang.String>",
+      "description": "List of allowed methods in CORS requests.",
+      "defaultValue": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE",
+        "OPTIONS"
+      ]
+    },
+    {
+      "name": "spring.security.allowedHeaders",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "allowedHeaders",
+      "description": "List of allowed headers in CORS requests.",
+      "defaultValue": [
+        "Access-Control-Allow-Headers",
+        "Authorization",
+        "Content-Type",
+        "authentication"
+      ]
+    },
+    {
+      "name": "spring.security.jwtExpirationTime",
+      "type": "java.lang.Long",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "jwtExpirationTime",
+      "description": "Expiration time for JWT tokens. If not set, the generated jwt expires in 15 minutes.",
+      "defaultValue": 900000
+    },
+    {
+      "name": "spring.security.corsConfigPattern",
+      "type": "java.lang.String",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "corsConfigPattern",
+      "description": "CORS configuration pattern.",
+      "defaultValue": "/**"
+    },
+    {
+      "name": "spring.security.securitySecret",
+      "type": "java.lang.String",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "securitySecret",
+      "description": "Security secret for the application."
+    }
+  ]
+}

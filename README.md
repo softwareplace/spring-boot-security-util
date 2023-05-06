@@ -10,15 +10,13 @@
 
 - Required beans
 
-> [SpringSecurityInit](src/main/kotlin/com/softwareplace/SpringSecurityInit.kt)
+> [SpringSecurityInit](src/main/kotlin/com/softwareplace/springsecurity/SpringSecurityInit.kt)
 >
-> [ControllerExceptionAdvice](src/main/kotlin/com/softwareplace/config/ControllerExceptionAdvice.kt)
+> [AuthorizationHandler](src/main/kotlin/com/softwareplace/springsecurity/authorization/AuthorizationHandler.kt)
 >
-> [AuthorizationHandler](src/main/kotlin/com/softwareplace/authorization/AuthorizationHandler.kt)
+> [AuthorizationUserService](src/main/kotlin/com/softwareplace/springsecurity/service/AuthorizationUserService.kt)
 >
-> [AuthorizationUserService](src/main/kotlin/com/softwareplace/service/AuthorizationUserService.kt)
->
-> [UserDetailsService](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/userdetails/UserDetailsService.html)
+> [ScopeService](src/main/kotlin/com/softwareplace/springsecurity/service/ScopeService.kt)
 
 ```kotlin
 @SpringBootApplication

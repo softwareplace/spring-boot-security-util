@@ -1,20 +1,17 @@
 package com.softwareplace
 
-import com.softwareplace.authorization.AuthorizationHandler
-import com.softwareplace.config.ControllerExceptionAdvice
-import com.softwareplace.json.logger.mapper.getObjectMapper
-import com.softwareplace.model.RequestUser
-import com.softwareplace.model.UserData
-import com.softwareplace.service.AuthorizationUserService
-import com.softwareplace.service.ValidatorService
+import com.softwareplace.jsonlogger.mapper.getObjectMapper
+import com.softwareplace.springsecurity.authorization.AuthorizationHandler
+import com.softwareplace.springsecurity.config.ControllerExceptionAdvice
+import com.softwareplace.springsecurity.model.RequestUser
+import com.softwareplace.springsecurity.model.UserData
+import com.softwareplace.springsecurity.service.AuthorizationUserService
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
-import javax.servlet.FilterChain
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
-import javax.validation.Validator
+
 
 @SpringBootApplication
 class App {
@@ -31,26 +28,35 @@ class App {
         override fun findUser(authToken: String): UserData? {
             return null
         }
+
+        override fun loadUserByUsername(username: String?): UserDetails {
+            TODO("Not yet implemented")
+        }
     }
 
     @Bean
     fun authorizationHandler() = object : AuthorizationHandler {
-
-        override fun userConfig(): List<Pair<String, List<String>>> {
-            return listOf(
-                "/**" to listOf("USER"),
-            )
+        override fun authorizationSuccessfully(request: jakarta.servlet.http.HttpServletRequest, userData: UserData) {
+            TODO("Not yet implemented")
         }
 
-        override fun authorizationSuccessfully(request: HttpServletRequest, userData: UserData) {
+        override fun onAuthorizationFailed(
+            request: jakarta.servlet.http.HttpServletRequest,
+            response: jakarta.servlet.http.HttpServletResponse,
+            chain: jakarta.servlet.FilterChain,
+            exception: Exception
+        ) {
+            TODO("Not yet implemented")
         }
 
-        override fun onAuthorizationFailed(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, exception: Exception) {
+        override fun onAuthorizationFailed(
+            request: jakarta.servlet.http.HttpServletRequest,
+            response: jakarta.servlet.http.HttpServletResponse
+        ) {
+            TODO("Not yet implemented")
         }
 
-        override fun onAuthorizationFailed(request: HttpServletRequest, response: HttpServletResponse) {
 
-        }
     }
 
     @Bean

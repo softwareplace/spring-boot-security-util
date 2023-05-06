@@ -1,5 +1,10 @@
 package com.softwareplace.validator
 
+import com.softwareplace.App
+import com.softwareplace.springsecurity.validator.RuleBuilderImpl
+import com.softwareplace.springsecurity.validator.ValidPassword
+import jakarta.validation.ConstraintViolation
+import jakarta.validation.Validator
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.params.ParameterizedTest
@@ -11,11 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest
 import java.util.*
 import java.util.function.Consumer
 import java.util.stream.Collectors
-import javax.validation.ConstraintViolation
-import javax.validation.Validator
 
-@SpringBootTest
+@SpringBootTest(classes = [App::class])
 internal class PasswordConstraintValidatorTest {
+
     @Autowired
     private lateinit var validator: Validator
 
@@ -23,7 +27,7 @@ internal class PasswordConstraintValidatorTest {
     @ValueSource(strings = ["1", "12", "123", "1234", "12345", "123456", "1234567"])
     fun `must to return password length constraint violation message with the minimum password requirements`(password: String) {
         val testUser = TestUser(password)
-        val constraintViolations = validator.validate(testUser)
+        val constraintViolations: MutableSet<ConstraintViolation<TestUser>> = validator.validate(testUser)
         assertNotNull(constraintViolations)
         val constraintViolationMessages = getMessagesFromConstraintViolation(constraintViolations)
         assertTrue(constraintViolationMessages.contains("Password must be 8 or more characters in length."))
