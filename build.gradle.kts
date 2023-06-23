@@ -17,9 +17,11 @@ tasks.getByName<Jar>("jar") {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = appGroup
+            groupId = "com.github.eliasmeireles"
             artifactId = "spring-boot-security-util"
             version = currentVersion
+            java.sourceCompatibility = JavaVersion.VERSION_19
+            java.targetCompatibility = JavaVersion.VERSION_19
 
             from(components["java"])
         }
@@ -30,10 +32,13 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                from(components["java"])
                 groupId = "com.github.eliasmeireles"
                 artifactId = "spring-boot-security-util"
                 version = currentVersion
+                java.sourceCompatibility = JavaVersion.VERSION_19
+                java.targetCompatibility = JavaVersion.VERSION_19
+
+                from(components["java"])
             }
         }
     }
