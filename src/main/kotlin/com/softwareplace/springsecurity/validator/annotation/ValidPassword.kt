@@ -1,6 +1,9 @@
-package com.softwareplace.springsecurity.validator
+package com.softwareplace.springsecurity.validator.annotation
 
 
+import com.softwareplace.springsecurity.validator.PasswordConstraintValidator
+import com.softwareplace.springsecurity.validator.role.RuleBuilder
+import com.softwareplace.springsecurity.validator.role.impl.RuleBuilderImpl
 import jakarta.validation.Constraint
 import jakarta.validation.Payload
 import kotlin.reflect.KClass

@@ -61,5 +61,12 @@ class ApplicationInfo {
      * - Default: 900000
      * */
     var jwtExpirationTime: Long = 900000L
+
+    /**
+     * When the [ControllerExceptionAdvice] handler some error,
+     * with [stackTraceLogEnable] = true, than [Throwable.printStackTrace] will bell called
+     * - Default: true
+     * */
+    var stackTraceLogEnable: Boolean = true
 }
 

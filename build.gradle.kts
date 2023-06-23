@@ -1,14 +1,12 @@
-import com.gradle.kts.build.source.*
+import com.gradle.kts.kotlin.buildsource.*
 
 plugins {
-    `maven-publish`
-    kotlin("jvm") version System.getProperty("kotlinVersion")
-    id("build-source-plugin")
-    id("build-submodule-source-plugin")
+    id("submodule-source-plugin")
 }
 
-val currentVersion = "0.0.16"
+val currentVersion = "0.0.18"
 val appGroup = "com.softwareplace.springsecurity"
+
 group = appGroup
 version = currentVersion
 
@@ -46,7 +44,6 @@ dependencies {
     springSecurity()
     jsonWebToken()
     jsonLogger()
-    springDoc()
     passay()
     test()
 }

@@ -1,5 +1,7 @@
 package com.softwareplace.springsecurity.validator
 
+import com.softwareplace.springsecurity.validator.annotation.ValidPassword
+import com.softwareplace.springsecurity.validator.role.impl.RuleBuilderImpl
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 import org.passay.PasswordData

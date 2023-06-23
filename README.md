@@ -1,22 +1,21 @@
-# Lib Spring boot Security Util
+# Spring boot Security Util
 
 ## Requirements
 
-- `Java 11` or higher
+- `Java 19`
 
 ****
 
-## Initialization
+## Initialization - Required beans
 
-- Required beans
+- [SpringSecurityInit](src/main/kotlin/com/softwareplace/springsecurity/SpringSecurityInit.kt) bean mapping
+  initialization
 
-> [SpringSecurityInit](src/main/kotlin/com/softwareplace/springsecurity/SpringSecurityInit.kt)
->
-> [AuthorizationHandler](src/main/kotlin/com/softwareplace/springsecurity/authorization/AuthorizationHandler.kt)
->
-> [AuthorizationUserService](src/main/kotlin/com/softwareplace/springsecurity/service/AuthorizationUserService.kt)
->
-> [ScopeService](src/main/kotlin/com/softwareplace/springsecurity/service/ScopeService.kt)
+- [AuthorizationHandler](src/main/kotlin/com/softwareplace/springsecurity/authorization/AuthorizationHandler.kt)
+  whenever a request was successful or not, you will be notified.
+
+- [AuthorizationUserService](src/main/kotlin/com/softwareplace/springsecurity/service/AuthorizationUserService.kt)
+  responsible for locating the data of the user making the request
 
 ```kotlin
 @SpringBootApplication
@@ -28,27 +27,18 @@ fun main(args: Array<String>) {
 }
 ```
 
-- Controller Advisor
-
-```kotlin
-@Order(Ordered.HIGHEST_PRECEDENCE)
-@RestControllerAdvice
-@ControllerAdvice(annotations = [RestController::class])
-class ControllerAdviceImpl(mapper: ObjectMapper) : ControllerExceptionAdvice(mapper)
-```
-
 `application.yaml`
 
 ```yaml
 spring:
-  security-util:
+  security:
     jwtExpirationTime: ${ENV_JWT_EXPIRATION_TIME}
     securitySecret: ${ENV_SECURITY_SECRET}
+    stackTraceLogEnable: false
     openUrl:
       - "/swagger-resources/**"
       - "/swagger-ui.html/**"
       - "/swagger-config/**"
-      - "/source-handler/**"
       - "/authorization"
       - "/swagger-ui/**"
       - "/favicon.ico/**"
@@ -76,7 +66,7 @@ repositories {
 ```
 
 ```kotlin
-implementation("com.github.eliasmeireles:spring-boot-security-util:$spring-boot-security-util-version")
+implementation("com.github.eliasmeireles:spring-boot-security-util:$springBootSecurityUtilVersion")
 ```
 
 - Maven

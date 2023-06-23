@@ -1,4 +1,4 @@
-package com.softwareplace.springsecurity.validator
+package com.softwareplace.springsecurity.validator.role
 
 import org.passay.*
 

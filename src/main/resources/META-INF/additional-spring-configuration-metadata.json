@@ -68,6 +68,13 @@
       "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
       "method": "securitySecret",
       "description": "Security secret for the application."
+    },
+    {
+      "name": "spring.security.stackTraceLogEnable",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "stackTraceLogEnable",
+      "description": "Enable or disable Throwable.printStackTrace calling on error handler."
     }
   ]
 }

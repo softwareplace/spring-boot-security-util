@@ -1,8 +1,8 @@
 package com.softwareplace.validator
 
 import com.softwareplace.App
-import com.softwareplace.springsecurity.validator.RuleBuilderImpl
-import com.softwareplace.springsecurity.validator.ValidPassword
+import com.softwareplace.springsecurity.validator.annotation.ValidPassword
+import com.softwareplace.springsecurity.validator.role.impl.RuleBuilderImpl
 import jakarta.validation.ConstraintViolation
 import jakarta.validation.Validator
 import org.junit.jupiter.api.Assertions.assertNotNull

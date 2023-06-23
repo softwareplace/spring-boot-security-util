@@ -5,10 +5,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 
-open class UserData : UserDetails {
+interface UserData : UserDetails {
+    val roles get():List<String> = emptyList()
+    val scopes get():List<String> = emptyList()
 
-    open var roles: List<String> = emptyList()
-    open val scopes: List<Long> = emptyList()
     open fun authToken() = ""
     override fun getAuthorities() = emptyList<SimpleGrantedAuthority>()
     override fun getPassword(): String? = null

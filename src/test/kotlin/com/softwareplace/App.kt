@@ -2,10 +2,14 @@ package com.softwareplace
 
 import com.softwareplace.jsonlogger.mapper.getObjectMapper
 import com.softwareplace.springsecurity.authorization.AuthorizationHandler
+import com.softwareplace.springsecurity.config.ApplicationInfo
 import com.softwareplace.springsecurity.config.ControllerExceptionAdvice
 import com.softwareplace.springsecurity.model.RequestUser
 import com.softwareplace.springsecurity.model.UserData
 import com.softwareplace.springsecurity.service.AuthorizationUserService
+import jakarta.servlet.FilterChain
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Primary
@@ -36,22 +40,22 @@ class App {
 
     @Bean
     fun authorizationHandler() = object : AuthorizationHandler {
-        override fun authorizationSuccessfully(request: jakarta.servlet.http.HttpServletRequest, userData: UserData) {
+        override fun authorizationSuccessfully(request: HttpServletRequest, userData: UserData) {
             TODO("Not yet implemented")
         }
 
         override fun onAuthorizationFailed(
-            request: jakarta.servlet.http.HttpServletRequest,
-            response: jakarta.servlet.http.HttpServletResponse,
-            chain: jakarta.servlet.FilterChain,
+            request: HttpServletRequest,
+            response: HttpServletResponse,
+            chain: FilterChain,
             exception: Exception
         ) {
             TODO("Not yet implemented")
         }
 
         override fun onAuthorizationFailed(
-            request: jakarta.servlet.http.HttpServletRequest,
-            response: jakarta.servlet.http.HttpServletResponse
+            request: HttpServletRequest,
+            response: HttpServletResponse
         ) {
             TODO("Not yet implemented")
         }
@@ -61,5 +65,5 @@ class App {
 
     @Bean
     @Primary
-    fun controllerAdvice() = ControllerExceptionAdvice(getObjectMapper())
+    fun controllerAdvice() = ControllerExceptionAdvice(getObjectMapper(), applicationInfo = ApplicationInfo())
 }

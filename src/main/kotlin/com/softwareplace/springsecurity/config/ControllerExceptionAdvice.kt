@@ -5,13 +5,16 @@ import com.softwareplace.jsonlogger.log.JsonLog
 import com.softwareplace.jsonlogger.log.kLogger
 import com.softwareplace.springsecurity.exception.ApiBaseException
 import com.softwareplace.springsecurity.exception.IllegalConstraintsException
+import com.softwareplace.springsecurity.extension.ThrowableExt.toResponse
 import com.softwareplace.springsecurity.model.Response
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.validation.ConstraintViolationException
 import org.slf4j.event.Level
 import org.springframework.beans.ConversionNotSupportedException
 import org.springframework.beans.TypeMismatchException
+import org.springframework.core.NestedRuntimeException
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpHeaders
@@ -51,7 +54,8 @@ import java.util.*
 @RestControllerAdvice
 @ControllerAdvice(annotations = [RestController::class])
 class ControllerExceptionAdvice(
-    val mapper: ObjectMapper
+    private val mapper: ObjectMapper,
+    private val applicationInfo: ApplicationInfo
 ) : ResponseEntityExceptionHandler(), AccessDeniedHandler, AuthenticationEntryPoint {
 
     override fun handleHttpRequestMethodNotSupported(
@@ -221,6 +225,24 @@ class ControllerExceptionAdvice(
         return serverError(request, response, ex)
     }
 
+
+    @ExceptionHandler(ConstraintViolationException::class)
+    fun exceptionHandler(request: HttpServletRequest, ex: ConstraintViolationException): ResponseEntity<Response> {
+        val response = Response(
+            info = ex.constraintViolations.associate {
+                val propertyName = it.propertyPath.last().toString()
+                Pair(propertyName, it.message)
+            }
+        )
+        getLogger(ex, request)
+            .error(ex)
+            .message(ex.message ?: "")
+            .add("service", request.requestURI)
+            .add("date", LocalDateTime.now())
+            .run()
+        return ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST)
+    }
+
     fun serverError(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -291,6 +313,21 @@ class ControllerExceptionAdvice(
         return unauthorizedAccess(ex, request)
     }
 
+
+    @ExceptionHandler(NestedRuntimeException::class)
+    fun dataIntegrityViolationExceptionHandler(
+        request: HttpServletRequest,
+        ex: NestedRuntimeException
+    ): ResponseEntity<Response> {
+        getLogger(ex, request)
+            .error(ex)
+            .message(ex.message ?: "")
+            .add("service", request.requestURI)
+            .add("date", LocalDateTime.now())
+            .run()
+        return ResponseEntity<Response>(ex.toResponse, HttpStatus.BAD_REQUEST)
+    }
+
     @ExceptionHandler(IllegalConstraintsException::class)
     fun constraintViolationException(
         request: HttpServletRequest,
@@ -304,7 +341,6 @@ class ControllerExceptionAdvice(
             .add("date", LocalDateTime.now())
             .add("customProperties", infoMap)
             .run()
-
 
         return ResponseEntity(
             Response(
@@ -358,18 +394,29 @@ class ControllerExceptionAdvice(
     fun getLogger(
         ex: Throwable?,
         request: HttpServletRequest
-    ) = JsonLog(kLogger)
+    ) = baseJsonLogBuilder()
         .error(ex)
-        .level(Level.ERROR)
-        .printStackTrackerEnable()
         .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
         .add("service", request.requestURI)
 
     fun getLogger(
         ex: Throwable?
-    ) = JsonLog(kLogger)
-        .error(ex)
-        .level(Level.ERROR)
-        .printStackTrackerEnable()
-        .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
+    ): JsonLog {
+        return baseJsonLogBuilder()
+            .error(ex)
+            .add("status", HttpStatus.INTERNAL_SERVER_ERROR.value())
+    }
+
+    open fun baseJsonLogBuilder(): JsonLog {
+        return if (applicationInfo.stackTraceLogEnable) {
+            JsonLog(kLogger)
+                .printStackTrackerEnable()
+                .level(Level.ERROR)
+        } else {
+            JsonLog(kLogger)
+                .level(Level.ERROR)
+        }
+    }
 }
+
+

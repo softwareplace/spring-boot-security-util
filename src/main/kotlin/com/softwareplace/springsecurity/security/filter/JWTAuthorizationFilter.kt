@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.event.Level
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.filter.OncePerRequestFilter
@@ -39,7 +40,7 @@ class JWTAuthorizationFilter(
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         try {
-//            SecurityContextHolder.getContext().authentication = getUsernamePasswordAuthenticationToken(request)
+            SecurityContextHolder.getContext().authentication = getUsernamePasswordAuthenticationToken(request)
             chain.doFilter(request, response)
         } catch (exception: Exception) {
             when (exception) {
