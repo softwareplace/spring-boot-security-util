@@ -19,7 +19,11 @@ import java.util.*
 @Component
 class JWTSystem(private val applicationInfo: ApplicationInfo) {
 
-    fun jwtGenerate(claims: Map<String, List<Any>>, subject: String): String {
+    fun jwtGenerate(
+        subject: String,
+        claims: Map<String, List<Any>> = mapOf(),
+        expiration: Long = applicationInfo.jwtExpirationTime
+    ): String {
         val algorithm = Algorithm.HMAC512(applicationInfo.securitySecret)
         val currentTimeMillis = System.currentTimeMillis()
 
@@ -31,7 +35,7 @@ class JWTSystem(private val applicationInfo: ApplicationInfo) {
         return builder
             .withIssuedAt(Date(currentTimeMillis))
             .withJWTId(UUID.randomUUID().toString())
-            .withExpiresAt(Date(currentTimeMillis + applicationInfo.jwtExpirationTime))
+            .withExpiresAt(Date(currentTimeMillis + expiration))
             .sign(algorithm)
     }
 

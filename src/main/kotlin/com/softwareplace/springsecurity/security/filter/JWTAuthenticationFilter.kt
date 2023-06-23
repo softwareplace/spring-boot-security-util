@@ -72,7 +72,7 @@ class JWTAuthenticationFilter(
         httpServletRequest.setAttribute(JWTAuthorizationFilter.USER_SESSION_DATA, userData)
         httpServletRequest.setAttribute(
             ACCESS_TOKEN,
-            jwtSystem.jwtGenerate(claims, userData.authToken())
+            jwtSystem.jwtGenerate(userData.authToken(), claims)
         )
         return authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
