@@ -1,9 +1,7 @@
 import com.gradle.kts.kotlin.buildsource.*
 
 plugins {
-    `maven-publish`
-    kotlin("jvm") version System.getProperty("kotlinVersion")
-    id("source-plugin")
+    id("submodule-source-plugin")
 }
 
 val currentVersion = "0.0.18"
