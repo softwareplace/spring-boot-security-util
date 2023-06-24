@@ -51,7 +51,6 @@ class JWTAuthorizationFilter(
                     response.status = HttpServletResponse.SC_UNAUTHORIZED
                     ResponseRegister.register(request, response, exception).level(Level.ERROR).run()
                 }
-
                 is JWTVerificationException -> {
                     response.status = HttpServletResponse.SC_UNAUTHORIZED
                     ResponseRegister.register(request, response).level(Level.ERROR).run()

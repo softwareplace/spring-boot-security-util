@@ -15,7 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.*
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 
 @Configuration
@@ -46,7 +46,7 @@ class WebSecurityConfig(
             .authorizeHttpRequests(this::authorizeHttpRequest)
             .exceptionHandling(this::exceptionHandler)
             .addFilterBefore(authenticationFilter, BasicAuthenticationFilter::class.java)
-            .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterAfter(jwtAuthorizationFilter, AnonymousAuthenticationFilter::class.java)
             .sessionManagement(this::sessionManagement)
             .build()
     }
@@ -56,7 +56,7 @@ class WebSecurityConfig(
     }
 
     private fun sessionManagement(session: SessionManagementConfigurer<HttpSecurity>) {
-        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
     }
 
     private fun corsConfiguration(cors: CorsConfigurer<HttpSecurity>) {

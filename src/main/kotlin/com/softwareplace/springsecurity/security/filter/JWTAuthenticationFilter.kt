@@ -37,6 +37,7 @@ class JWTAuthenticationFilter(
         try {
             return authenticationHandler(httpServletRequest, httpServletResponse)
         } catch (ex: Exception) {
+            httpServletResponse.status = HttpServletResponse.SC_FORBIDDEN
             ResponseRegister.register(httpServletRequest, httpServletResponse, ex).level(Level.ERROR)
                 .printStackTrackerEnable()
                 .error(ex)
