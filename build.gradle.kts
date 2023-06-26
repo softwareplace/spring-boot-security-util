@@ -2,7 +2,6 @@ import com.gradle.kts.kotlin.buildsource.*
 
 plugins {
     `maven-publish`
-    kotlin("jvm") version System.getProperty("kotlinVersion")
     id("submodule-source-plugin")
 }
 
