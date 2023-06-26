@@ -1,10 +1,12 @@
 import com.gradle.kts.kotlin.buildsource.*
 
 plugins {
+    `maven-publish`
+    kotlin("jvm") version System.getProperty("kotlinVersion")
     id("submodule-source-plugin")
 }
 
-val currentVersion = "0.0.18"
+val currentVersion = "0.0.16-SNAPSHOT"
 val appGroup = "com.softwareplace.springsecurity"
 
 group = appGroup
