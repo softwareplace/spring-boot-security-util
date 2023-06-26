@@ -2,5 +2,4 @@ jdk:
   - openjdk19
 before_install:
   - ./setup.sh
-install:
-  - echo "Running publish local"
+
