@@ -1,7 +1,0 @@
-jdk:
-  - openjdk19
-before_install:
-  - ./setup.sh
-install:
-  - echo "Running publish local"
-  - ./gradlew clean -Pgroup=com.github.eliasmeireles -xtest assemble publishToMavenLocal --refresh-dependencies
