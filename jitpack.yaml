@@ -1,7 +1,7 @@
 jdk:
   - openjdk19
-
-before_install:
+install:
   - echo "Running publish local"
   - git submodule update --recursive --init
   - git submodule update --recursive --remote
+  - ./gradlew clean -Pgroup=com.github.eliasmeireles -xtest assemble publishToMavenLocal --refresh-dependencies
