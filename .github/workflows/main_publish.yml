@@ -19,3 +19,6 @@ jobs:
         run: |
           make update
           make test
+      - name: Publish Local
+        run: |
+          make local-publish
