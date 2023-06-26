@@ -1,2 +1,4 @@
 jdk:
-  - openjdk11
+  - openjdk19
+before_install:
+  - ./deploy-roles.sh
