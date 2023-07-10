@@ -40,7 +40,11 @@ class JWTAuthorizationFilter(
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         try {
-            SecurityContextHolder.getContext().authentication = getUsernamePasswordAuthenticationToken(request)
+            val passwordAuthenticationToken = authorizationUserService.authenticate(
+                request = request,
+                defaultHandler = this::getUsernamePasswordAuthenticationToken
+            )
+            SecurityContextHolder.getContext().authentication = passwordAuthenticationToken
             chain.doFilter(request, response)
         } catch (exception: Exception) {
             when (exception) {
@@ -91,6 +95,8 @@ class JWTAuthorizationFilter(
     }
 
     companion object {
+        const val BEARER = "Bearer "
+        const val BASIC = "Basic "
         const val UNAUTHORIZED_ERROR_MESSAGE = "Access was not authorized on this request."
         const val ROLE = "ROLE_"
         const val ERROR_RESPONSE_MESSAGE = "Access denied."
