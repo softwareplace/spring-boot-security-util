@@ -1,0 +1,16 @@
+[
+  {
+    "userId": 1,
+    "name": "Spring Example 01",
+    "email": "springutil+example01@email.com",
+    "pass": "$2a$05$T/W2l/CKppJ6ai6LxjtKduAdfy30cYhjF8M0qtihjp6A.qLKLwXgm",
+    "token": "$2a$05$NIzfGE1kCWMkg3StvybH0.eiH8TVUlSJmvar3GXmqjQQQ1OMB/8AS"
+  },
+  {
+    "userId": 2,
+    "name": "Spring Example 02",
+    "email": "springutil+example02@email.com",
+    "pass": "$2a$05$RN.fuM8mxqZZ5vyGrcV5quUWoBkMSNs27q3ajWj4P8u6PJ.MZ8The",
+    "token": "$2a$05$LO/8KkXcpag2jiaRES.6beWiSS.TteIIl8NUMNZsV9DU8/puGoN0S"
+  }
+]

@@ -1,0 +1,24 @@
+server:
+  servlet:
+    context-path: /api/spring-security-example/
+
+spring:
+  security:
+    stackTraceLogEnable: true
+    jwtExpirationTime: 144000000
+    securitySecret: $2a$05$j6nRMrELeCnQ2k7BxoHV
+    openUrl:
+      - "/users/create"
+      - "/swagger-resources/**"
+      - "/swagger-ui.html/**"
+      - "/swagger-config/**"
+      - "/authorization"
+      - "/swagger-ui/**"
+      - "/favicon.ico/**"
+      - "/v3/api-docs/**"
+      - "/v3/api-docs"
+      - "/webjars/**"
+      - "/swagger/**"
+      - "/assets/**"
+      - "/csrf/**"
+      - "/docs/**"
