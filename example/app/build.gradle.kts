@@ -17,9 +17,14 @@ dependencies {
     springSecurity()
     springJettyApi()
     springWebFlux()
+    springDataJpa()
     jsonWebToken()
     jsonLogger()
+    postgresql()
     mappstruct()
+    retrofit2()
     passay()
+
+    testContainersPostgresql()
     test()
 }

@@ -1,28 +1,67 @@
 package com.softwareplace.springsecurity.example.model
 
+import VARCHAR_100_COLUMN_DEFINITION
+import VARCHAR_150_COLUMN_DEFINITION
+import VARCHAR_20_COLUMN_DEFINITION
+import VARCHAR_60_COLUMN_DEFINITION
 import com.softwareplace.springsecurity.encrypt.Encrypt
 import com.softwareplace.springsecurity.model.UserData
+import com.softwareplace.springsecurity.validator.annotation.ValidCpfCnpj
 import com.softwareplace.springsecurity.validator.annotation.ValidEmail
 import com.softwareplace.springsecurity.validator.annotation.ValidPassword
+import jakarta.persistence.*
+import org.springframework.data.annotation.Transient
+import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
+import java.util.*
 
 
+@Entity
+@Table(name = "app_users")
 data class AppUserData(
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var userId: Long = 0,
+    @Column(columnDefinition = VARCHAR_100_COLUMN_DEFINITION, nullable = false)
     val name: String,
     @ValidEmail
+    @Column(columnDefinition = VARCHAR_150_COLUMN_DEFINITION, nullable = false, unique = true)
     val email: String,
+    @ValidCpfCnpj(acceptOnly = ValidCpfCnpj.Type.CPF, onErrorUseName = "Invalid CPF")
+    @Column(columnDefinition = VARCHAR_20_COLUMN_DEFINITION, nullable = false, unique = true)
+    val cpf: String,
+    @ValidCpfCnpj(acceptOnly = ValidCpfCnpj.Type.CNPJ, onErrorUseName = "Invalid CNPJ")
+    @Column(columnDefinition = VARCHAR_20_COLUMN_DEFINITION, nullable = false, unique = true)
+    val cnpj: String,
+
+    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     var createdAt: LocalDateTime? = null,
-    @ValidPassword
-    private val pass: String,
-    private val token: String? = null
+
+    @Column(name = "password", columnDefinition = VARCHAR_60_COLUMN_DEFINITION, nullable = false)
+    private var pass: String,
+
+    @Column(name = "token", columnDefinition = VARCHAR_60_COLUMN_DEFINITION, nullable = false)
+    var token: String? = null
 ) : UserData {
 
-    private val encrypt = Encrypt(pass)
+    @Transient
+    @ValidPassword(onErrorUseName = "invalidPassword")
+    private var userPasswordValidate: String = pass
 
-    override fun getPassword(): String = encrypt.encodedPassword
+    @PrePersist
+    fun beforeCreate() {
+        val encrypt = Encrypt(pass)
+        pass = encrypt.encodedPassword
+        token = encrypt.authToken
+        createdAt = LocalDateTime.now().atZone(TimeZone.getTimeZone("America/Sao_Paulo").toZoneId()).toLocalDateTime()
+    }
+
+    override fun getPassword(): String = pass
 
     override fun getUsername(): String = email
 
-    override fun authToken(): String = encrypt.authToken
+    override fun authToken(): String = token!!
 }

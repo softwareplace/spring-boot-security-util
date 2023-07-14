@@ -92,10 +92,16 @@ components:
           type: string
         email:
           type: string
+        cnpj:
+          type: string
+        cpf:
+          type: string
       required:
         - name
         - password
         - email
+        - cpf
+        - cnpj
 
     UserDetail:
       type: object
@@ -109,10 +115,16 @@ components:
           type: string
         email:
           type: string
+        cnpj:
+          type: string
+        cpf:
+          type: string
       required:
-        - userId
         - name
+        - password
         - email
+        - cpf
+        - cnpj
         - createdAt
 
     Response:
@@ -125,13 +137,12 @@ components:
           type: string
         success:
           type: boolean
-        info:
+        errorInfo:
           type: object
       required:
         - timestamp
         - message
         - success
-        - info
     Authorization:
       type: object
       allOf:

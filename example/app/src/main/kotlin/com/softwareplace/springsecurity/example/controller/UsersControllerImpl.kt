@@ -6,6 +6,7 @@ import com.softwareplace.springsecurity.example.rest.controller.UsersController
 import com.softwareplace.springsecurity.example.rest.model.UserDetailRest
 import com.softwareplace.springsecurity.example.rest.model.UserRest
 import com.softwareplace.springsecurity.example.service.UsersService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 
@@ -20,7 +21,7 @@ class UsersControllerImpl(
         return mapper.parse(userRest)
             .run(service::addUser)
             .run(mapper::parse)
-            .run { ResponseEntity.ok(this) }
+            .run { ResponseEntity(this, HttpStatus.CREATED) }
     }
 
     override suspend fun getUserDetail(authorization: String): ResponseEntity<UserDetailRest> {

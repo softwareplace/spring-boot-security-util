@@ -11,11 +11,11 @@ class UsersService(
     private val repository: UserRepository
 ) : AuthorizationUserService {
 
-    fun addUser(user: AppUserData) = repository.addUser(user)
+    fun addUser(user: AppUserData) = repository.save(user)
 
-    override fun findUser(user: RequestUser) = repository.findUserByEmail(user.username)
+    override fun findUser(user: RequestUser) = repository.findByEmail(user.username)
 
-    override fun findUser(authToken: String) = repository.findUserToken(authToken)
+    override fun findUser(authToken: String) = repository.findByToken(authToken)
 
-    override fun loadUserByUsername(username: String) = repository.findUserToken(username)
+    override fun loadUserByUsername(username: String) = repository.findByToken(username)
 }
