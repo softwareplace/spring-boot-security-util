@@ -12,6 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.passay.LengthRule
 import org.passay.Rule
+import org.passay.RuleResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
@@ -24,8 +25,9 @@ internal class PasswordConstraintValidatorTest {
     @ParameterizedTest
     @ValueSource(strings = ["1", "12", "123", "1234", "12345", "123456", "1234567"])
     fun `must to return password length constraint violation message with the minimum password requirements`(password: String) {
-        val testUser = TestUser(password)
-        val constraintViolations: MutableSet<ConstraintViolation<TestUser>> = validator.validate(testUser)
+        val strongValidation = StrongValidation(password)
+        val constraintViolations: MutableSet<ConstraintViolation<StrongValidation>> =
+            validator.validate(strongValidation)
         assertNotNull(constraintViolations)
         val constraintViolationMessages = getMessagesFromConstraintViolation(constraintViolations)
         assertTrue(
@@ -37,8 +39,8 @@ internal class PasswordConstraintValidatorTest {
     @ParameterizedTest
     @ValueSource(strings = ["122165464654897864654654697987967498798"])
     fun `must to return password length constraint violation message with the maximum password requirements`(password: String) {
-        val testUser = TestUser(password)
-        val constraintViolations = validator.validate(testUser)
+        val strongValidation = StrongValidation(password)
+        val constraintViolations = validator.validate(strongValidation)
         assertNotNull(constraintViolations)
         val constraintViolationMessages = getMessagesFromConstraintViolation(constraintViolations)
         assertTrue(
@@ -49,9 +51,9 @@ internal class PasswordConstraintValidatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = ["12216abcdefgh", "abcdefgh_12216"])
-    fun `must to contains message with uppercase characters missing`(password: String?) {
-        val testUser = TestUser(password)
-        val constraintViolations = validator.validate(testUser)
+    fun `must to contains message with uppercase characters missing`(password: String) {
+        val strongValidation = StrongValidation(password)
+        val constraintViolations = validator.validate(strongValidation)
         assertNotNull(constraintViolations)
         val constraintViolationMessages = getMessagesFromConstraintViolation(constraintViolations)
         assertTrue(
@@ -63,8 +65,8 @@ internal class PasswordConstraintValidatorTest {
     @ParameterizedTest
     @ValueSource(strings = ["DALKJFDJFDKJD", "DALKJFDJFDKJD12216@"])
     fun `must to contains message with lowercase characters missing`(password: String) {
-        val testUser = TestUser(password)
-        val constraintViolations = validator.validate(testUser)
+        val strongValidation = StrongValidation(password)
+        val constraintViolations = validator.validate(strongValidation)
         assertNotNull(constraintViolations)
         val constraintViolationMessages = getMessagesFromConstraintViolation(constraintViolations)
         assertTrue(
@@ -76,8 +78,8 @@ internal class PasswordConstraintValidatorTest {
     @ParameterizedTest
     @ValueSource(strings = ["123456DKtsatsa", "123456"])
     fun `must to contains message with special characters missing`(password: String) {
-        val testUser = TestUser(password)
-        val constraintViolations = validator.validate(testUser)
+        val strongValidation = StrongValidation(password)
+        val constraintViolations = validator.validate(strongValidation)
         assertNotNull(constraintViolations)
         val constraintViolationMessages: Map<String, List<String>> =
             getMessagesFromConstraintViolation(constraintViolations)
@@ -102,27 +104,70 @@ internal class PasswordConstraintValidatorTest {
             "1qazXSW@"]
     )
     fun `must not contains violation when password is valid`(password: String) {
-        val testUser = TestUser(password)
-        val constraintViolations = validator.validate(testUser)
+        val strongValidation = StrongValidation(password)
+        val constraintViolations = validator.validate(strongValidation)
+        assertTrue(constraintViolations.isEmpty())
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "1",
+            "weakPass",
+            "%SecurePass",
+            "Secret@Tgdb",
+            "Strong!Pwd",
+            "&SuperSecure"
+        ]
+    )
+    fun `must not contains violation base on custom role`(password: String) {
+        val customRole = CustomRole(password)
+        val constraintViolations = validator.validate(customRole)
         assertTrue(constraintViolations.isEmpty())
     }
 
 
-    private data class TestUser(
+    private data class StrongValidation(
         @ValidPassword(
-            rulesBuilder = TestRuleBuilderImplTest::class,
+            rulesBuilder = StrongRoleBuilder::class,
             onErrorUseName = "userPasswordInvalid"
-        ) var password: String?,
+        ) var password: String,
     )
 
-    class TestRuleBuilderImplTest : RuleBuilderImpl() {
+    private data class CustomRole(
+        @ValidPassword(
+            rulesBuilder = CustomRoleBuilder::class,
+            onErrorUseName = "userPasswordInvalid"
+        ) var password: String,
+    )
+
+    class StrongRoleBuilder : RuleBuilderImpl() {
         override fun lengthRule(): Rule {
             return LengthRule(MIN_LENGTH, MAX_LENGTH)
         }
     }
 
+    class CustomRoleBuilder : RuleBuilderImpl() {
+
+        override fun lengthRule(): Rule {
+            return LengthRule(1, 10000)
+        }
+
+        override fun digitRule() = Rule { roleResult(true) }
+
+        override fun upperCaseRule() = Rule { roleResult(true) }
+
+        override fun lowerCaseRule() = Rule { roleResult(true) }
+
+        override fun specialRule() = Rule { roleResult(true) }
+    }
+
     companion object {
         const val MIN_LENGTH = 8
         const val MAX_LENGTH = 30
+
+        fun roleResult(isValid: Boolean) = object : RuleResult() {
+            override fun isValid() = isValid
+        }
     }
 }
