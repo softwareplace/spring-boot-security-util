@@ -13,3 +13,11 @@ fun String.asPathRegex(): Regex {
         .replace("**", ".*")
     return Regex(pattern)
 }
+
+fun String.convertSnakeCaseToCamelCase(): String {
+    val parts = split("_")
+    val camelCase = parts.mapIndexed { index, part ->
+        if (index > 0) part.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } else part
+    }.joinToString("")
+    return camelCase
+}

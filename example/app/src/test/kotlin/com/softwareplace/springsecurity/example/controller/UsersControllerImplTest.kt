@@ -30,6 +30,11 @@ class UsersControllerImplTest : BaseTest() {
         assertEquals(201, response.code())
         assertNotNull(response.body())
         assertNotNull(response.body()?.userId)
+
+        val responseR = apiClient.create(user).execute()
+
+        println(responseR)
+
     }
 
     @Test

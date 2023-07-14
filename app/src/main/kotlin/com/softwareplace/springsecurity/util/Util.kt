@@ -7,9 +7,9 @@ import java.util.*
 import java.util.stream.Collectors
 
 
-fun <T> getMessagesFromConstraintViolation(constraintViolations: Set<ConstraintViolation<T>>): Map<String, List<String>> {
+fun getMessagesFromConstraintViolation(constraintViolations: Set<ConstraintViolation<*>>): Map<String, List<String>> {
     val constraintViolationMessages: MutableMap<String, List<String>> = mutableMapOf()
-    constraintViolations.forEach { constraintViolation: ConstraintViolation<T> ->
+    constraintViolations.forEach { constraintViolation: ConstraintViolation<*> ->
         if (constraintViolation is ConstraintViolationImpl &&
             constraintViolation.expressionVariables != null &&
             constraintViolation.expressionVariables.isNotEmpty()

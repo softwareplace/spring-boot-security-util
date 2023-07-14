@@ -1,9 +1,6 @@
 package com.softwareplace
 
-import com.softwareplace.jsonlogger.mapper.getObjectMapper
 import com.softwareplace.springsecurity.authorization.AuthorizationHandler
-import com.softwareplace.springsecurity.config.ApplicationInfo
-import com.softwareplace.springsecurity.config.ControllerExceptionAdvice
 import com.softwareplace.springsecurity.model.RequestUser
 import com.softwareplace.springsecurity.model.UserData
 import com.softwareplace.springsecurity.service.AuthorizationUserService
@@ -12,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Primary
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 
@@ -63,7 +59,7 @@ class App {
 
     }
 
-    @Bean
-    @Primary
-    fun controllerAdvice() = ControllerExceptionAdvice(getObjectMapper(), applicationInfo = ApplicationInfo())
+//    @Bean
+//    @Primary
+//    fun controllerAdvice() = ControllerExceptionAdvice(getObjectMapper(), applicationInfo = ApplicationInfo())
 }
