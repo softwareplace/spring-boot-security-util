@@ -13,6 +13,7 @@ import com.softwareplace.springsecurity.service.AuthorizationUserService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.assertj.core.util.VisibleForTesting
 import org.slf4j.event.Level
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -71,16 +72,30 @@ class JWTAuthenticationFilter(
     ): Authentication {
         val claims = authorizationUserService.claims(httpServletRequest, userData)
         httpServletRequest.setAttribute(JWTAuthorizationFilter.USER_SESSION_DATA, userData)
-        httpServletRequest.setAttribute(
-            ACCESS_TOKEN,
-            jwtSystem.jwtGenerate(userData.authToken(), claims)
-        )
+
+        val authorizationToken = generateToken(userData, claims)
+
+        httpServletRequest.setAttribute(ACCESS_TOKEN, authorizationToken)
+
         return authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(
                 userData.authToken(),
                 requestUser.password
             )
         )
+    }
+
+    @VisibleForTesting
+    fun generateToken(userData: UserData, claims: Map<String, List<Any>>): String {
+        val tokenExpiration = authorizationUserService.tokenExpiration(userData)
+
+        return when {
+            tokenExpiration != null -> {
+                jwtSystem.jwtGenerate(userData.authToken(), claims, tokenExpiration)
+            }
+
+            else -> jwtSystem.jwtGenerate(userData.authToken(), claims)
+        }
     }
 
     private fun buildUserRequest(httpServletRequest: HttpServletRequest): RequestUser? {

@@ -27,6 +27,8 @@ interface AuthorizationUserService : UserDetailsService {
         return HashMap()
     }
 
+    fun tokenExpiration(userData: UserData): Long? = null
+
     fun authenticate(
         request: HttpServletRequest,
         defaultHandler: (request: HttpServletRequest) -> UsernamePasswordAuthenticationToken
