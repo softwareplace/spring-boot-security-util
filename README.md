@@ -66,7 +66,7 @@ repositories {
 ```
 
 ```kotlin
-implementation("com.github.eliasmeireles:spring-boot-security-util:$springBootSecurityUtilVersion")
+implementation("com.github.softwareplace:spring-boot-security-util:$springBootSecurityUtilVersion")
 ```
 
 - Maven
