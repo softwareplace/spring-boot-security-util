@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
 annotation class ValidEmail(
     val message: String = "Email address is not valid",
     val onErrorUseName: String = "",
-    val regex: String = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9]+\\.[A-Za-z]{2,}\$",
+    val regex: String = "^[a-zA-Z0-9]+(([_+. -]?[a-zA-Z0-9])+)*@(?!-)[A-Za-z0-9.-]+(?<![.-])[.][A-Za-z]{2,}$",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )

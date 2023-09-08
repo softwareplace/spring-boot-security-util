@@ -23,7 +23,12 @@ class EmailConstraintValidatorTest {
             "user2@example.com",
             "user2@125example.com",
             "user+teste+teste@example.com",
-            "user+teste@example.com"
+            "user+teste@example.com",
+            "user@example.org",
+            "userkpk4@yahoo.co.in",
+            "userkpk4@yahoo.com.br",
+            "user.name+tag+sorting@example.com",
+            "user.name+tag+sorting@big.letters.example.com",
         ]
     )
     fun `must to return empty violation when email is valid`(email: String) {
@@ -36,15 +41,17 @@ class EmailConstraintValidatorTest {
     @ValueSource(
         strings = [
             "user@example",
-            "user.example.com",
-            "user@.com",
-            "@example.com",
-            "user@-example.com",
             "user@example..com",
-            "user@_example.com",
             "user@example_com",
             "user@123.456.789.012",
-            "user@example+domain.com"
+            "user@example+domain.com",
+            "user@.org",
+            "a@b",
+            "user@e.c",
+            "user.@example.com",
+            "user..name@example.com",
+            "user@@yahoo.com.br",
+            "user.name+tag++sorting@example.com",
         ]
     )
     fun `must to return none empty violation when email is not valid`(email: String) {
