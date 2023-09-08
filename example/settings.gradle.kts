@@ -1,9 +1,18 @@
+import java.util.*
+
 rootProject.name = "spring-boot-security-util-example"
 
 include(":app")
 include(":security")
 
-apply(from = "../spring-boot-builder-plugin/libs.settings.gradle.kts")
+
+val properties = Properties()
+val inputStream = rootDir.resolve("../spring-boot-builder-plugin/build-configuration/gradle.properties").inputStream()
+properties.load(inputStream)
+
+properties.forEach { (key, value) ->
+    System.setProperty(key.toString(), value.toString())
+}
 
 project(":security").projectDir = file("../app")
 
