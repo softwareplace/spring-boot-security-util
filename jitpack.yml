@@ -1,8 +1,9 @@
 jdk:
   - openjdk19
 before_install:
-  - -rf spring-boot-builder-plugin
+  - rm -rf spring-boot-builder-plugin
   - git submodule update --recursive --init
+  - git submodule update --recursive --remote
   - sdk install java 19.ea.1.pma-open
   - sdk use java 19.ea.1.pma-open
   - ./gradlew test
