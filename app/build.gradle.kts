@@ -5,7 +5,7 @@ plugins {
     id("submodule-source-plugin")
 }
 
-val currentVersion = "0.0.31"
+val currentVersion = "v0.0.3"
 val appGroup = "com.softwareplace.springsecurity"
 
 group = appGroup
@@ -13,6 +13,10 @@ version = currentVersion
 
 tasks.getByName<Jar>("jar") {
     archiveClassifier.set("")
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
 }
 
 publishing {
