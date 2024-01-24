@@ -1,11 +1,11 @@
 import com.gradle.kts.kotlin.buildsource.*
 
 plugins {
-    `maven-publish`
+    id("maven-publish")
     id("submodule-source-plugin")
 }
 
-val currentVersion = "v0.0.30"
+val currentVersion = "0.0.31"
 val appGroup = "com.softwareplace.springsecurity"
 
 group = appGroup
@@ -21,25 +21,15 @@ publishing {
             groupId = "com.github.eliasmeireles"
             artifactId = "spring-boot-security-util"
             version = currentVersion
-            java.sourceCompatibility = JavaVersion.VERSION_19
-            java.targetCompatibility = JavaVersion.VERSION_19
+            java.sourceCompatibility = JavaVersion.toVersion(System.getProperty("jdkVersion"))
+            java.targetCompatibility = JavaVersion.toVersion(System.getProperty("jdkVersion"))
 
             from(components["java"])
         }
     }
-}
 
-publishing {
-    publications {
-        create<MavenPublication>("release") {
-            groupId = "com.github.eliasmeireles"
-            artifactId = "spring-boot-security-util"
-            version = currentVersion
-            java.sourceCompatibility = JavaVersion.VERSION_19
-            java.targetCompatibility = JavaVersion.VERSION_19
-
-            from(components["java"])
-        }
+    repositories {
+        mavenLocal()
     }
 }
 
