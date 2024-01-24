@@ -5,7 +5,7 @@ plugins {
     id("submodule-source-plugin")
 }
 
-val currentVersion = "v0.0.3"
+val currentVersion = "v0.0.30"
 val appGroup = "com.softwareplace.springsecurity"
 
 group = appGroup

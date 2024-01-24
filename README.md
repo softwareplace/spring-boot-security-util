@@ -1,5 +1,7 @@
 # Spring boot Security Util
 
+[![](https://jitpack.io/v/softwareplace/spring-boot-security-util.svg)](https://jitpack.io/#softwareplace/spring-boot-security-util)
+
 ## Requirements
 
 - `Java 19`
