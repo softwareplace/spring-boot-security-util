@@ -10,6 +10,3 @@ before_install:
   - git submodule update --recursive --init
   - git submodule update --recursive --remote
 
-install:
-  ./gradlew clean -Pgroup=com.github.eliasmeireles -xtest assemble publishToMavenLocal --refresh-dependencies
-
