@@ -18,7 +18,6 @@ jobs:
 
       - name: Test run
         run: |
-          make update
           make test
       - name: Publish Local
         run: |
