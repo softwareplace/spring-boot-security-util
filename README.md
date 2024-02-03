@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- `Java 19`
+- `Java 21`
 
 ****
 
@@ -86,7 +86,7 @@ implementation("com.github.softwareplace:spring-boot-security-util:$springBootSe
 ```xml
 
 <dependency>
-    <groupId>com.github.eliasmeireles</groupId>
+    <groupId>com.github.softwareplace</groupId>
     <artifactId>spring-boot-security-util</artifactId>
     <version>${spring-boot-security-util-version}</version>
 </dependency>

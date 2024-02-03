@@ -1,8 +1,30 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        gradlePluginPortal()
+        maven("https://jitpack.io")
+        maven("https://repo.spring.io/milestone")
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        gradlePluginPortal()
+        maven("https://jitpack.io")
+    }
+
+    dependencies {
+        classpath("com.github.softwareplace.springboot:plugins:0.0.1-SNAPSHOT")
+    }
+}
+
 rootProject.name = "spring-boot-security-util"
 
 include(":app")
 
-apply(from = "spring-boot-builder-plugin/libs.settings.gradle.kts")
-apply(from = "spring-boot-builder-plugin/kotlin-included.build.settings.gradle.kts")
+
 
 

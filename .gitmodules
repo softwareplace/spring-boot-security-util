@@ -1,3 +1,0 @@
-[submodule "spring-boot-builder-plugin"]
-	path = spring-boot-builder-plugin
-	url = https://github.com/softwareplace/spring-boot-builder-plugin.git
