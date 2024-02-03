@@ -6,4 +6,4 @@ test:
 	make example-test
 
 example-test:
-	cd example && ./gradlew app:test --info
+	cd example && ./gradlew app:test
