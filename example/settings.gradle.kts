@@ -5,9 +5,6 @@ rootProject.name = "spring-boot-security-util-example"
 include(":app")
 include(":security")
 
-
-
-
 project(":security").projectDir = file("../app")
 
 pluginManagement {
