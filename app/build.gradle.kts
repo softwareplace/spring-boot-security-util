@@ -13,8 +13,6 @@ val jdkVersion: String by project
 group = appGroup
 version = currentVersion
 
-println(jdkVersion)
-
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
 }
