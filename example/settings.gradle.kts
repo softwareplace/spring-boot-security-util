@@ -6,19 +6,29 @@ include(":app")
 include(":security")
 
 
-val properties = Properties()
-val inputStream = rootDir.resolve("../spring-boot-builder-plugin/build-configuration/gradle.properties").inputStream()
-properties.load(inputStream)
 
-properties.forEach { (key, value) ->
-    System.setProperty(key.toString(), value.toString())
-}
 
 project(":security").projectDir = file("../app")
 
+pluginManagement {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        gradlePluginPortal()
+        maven("https://jitpack.io")
+        maven("https://repo.spring.io/milestone")
+    }
+}
 
-includeBuild("../spring-boot-builder-plugin/build-configuration")
-includeBuild("../spring-boot-builder-plugin/source/source-kotlin")
-includeBuild("../spring-boot-builder-plugin/openapi/openapi-kotlin")
-
-
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        gradlePluginPortal()
+        maven("https://jitpack.io")
+        maven("https://repo.spring.io/milestone")
+    }
+    dependencies {
+        classpath("com.github.softwareplace.springboot:plugins:0.0.1-SNAPSHOT")
+    }
+}

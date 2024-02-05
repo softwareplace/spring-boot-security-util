@@ -1,50 +1,32 @@
-import com.gradle.kts.kotlin.buildsource.*
+import com.github.softwareplace.springboot.buildconfiguration.Dependencies
+import com.github.softwareplace.springboot.kotlin.*
 
 plugins {
     id("maven-publish")
-    id("submodule-source-plugin")
+    id("com.github.softwareplace.springboot.kotlin-submodule")
 }
 
-val currentVersion = "v0.0.4"
+val currentVersion = "0.0.4"
 val appGroup = "com.softwareplace.springsecurity"
 
 group = appGroup
 version = currentVersion
 
-tasks.getByName<Jar>("jar") {
-    archiveClassifier.set("")
-}
-
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-    sourceCompatibility = JavaVersion.toVersion(System.getProperty("jdkVersion"))
-    targetCompatibility = JavaVersion.toVersion(System.getProperty("jdkVersion"))
-
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(System.getProperty("jdkVersion")))
-    }
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.github.eliasmeireles"
+            groupId = "com.softwareplace"
             artifactId = "spring-boot-security-util"
             version = currentVersion
-            java.sourceCompatibility = JavaVersion.toVersion(System.getProperty("jdkVersion"))
-            java.targetCompatibility = JavaVersion.toVersion(System.getProperty("jdkVersion"))
+            java.sourceCompatibility = JavaVersion.toVersion(Dependencies.Version.jdkVersion)
+            java.targetCompatibility = JavaVersion.toVersion(Dependencies.Version.jdkVersion)
 
             from(components["java"])
         }
-    }
-
-    repositories {
-        mavenLocal()
     }
 }
 

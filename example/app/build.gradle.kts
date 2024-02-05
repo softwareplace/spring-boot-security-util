@@ -1,10 +1,8 @@
-import com.gradle.kts.kotlin.buildsource.*
-import com.gradle.kts.kotlin.openapi.OpenApiSettings
-import com.gradle.kts.kotlin.openapi.openApiSettings
+import com.github.softwareplace.springboot.kotlin.*
 
 plugins {
-    id("source-plugin")
-    id("openapi-plugin")
+    id("com.github.softwareplace.springboot.kotlin")
+    id("com.github.softwareplace.springboot.kotlin-openapi")
 }
 
 group = "com.softwareplace.springsecurity.example"

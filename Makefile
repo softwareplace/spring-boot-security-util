@@ -1,9 +1,4 @@
-update:
-	git submodule update --recursive --init
-	git submodule update --recursive --remote
-
 local-publish:
-	make update
 	./gradlew clean -Pgroup=com.github.eliasmeireles -xtest assemble publishToMavenLocal --refresh-dependencies
 
 test:
@@ -11,4 +6,4 @@ test:
 	make example-test
 
 example-test:
-	cd example && ./gradlew app:test && cd ..
+	cd example && ./gradlew app:test
