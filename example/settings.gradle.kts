@@ -29,6 +29,6 @@ buildscript {
         maven("https://repo.spring.io/milestone")
     }
     dependencies {
-        classpath("com.github.softwareplace.springboot:plugins:0.0.1-SNAPSHOT")
+        classpath("com.github.softwareplace.springboot:plugins:0.0.1")
     }
 }

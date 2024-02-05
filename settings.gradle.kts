@@ -1,3 +1,7 @@
+rootProject.name = "spring-boot-security-util"
+
+include(":app")
+
 pluginManagement {
     repositories {
         mavenCentral()
@@ -17,13 +21,10 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.github.softwareplace.springboot:plugins:0.0.1-SNAPSHOT")
+        classpath("com.github.softwareplace.springboot:plugins:0.0.1")
     }
 }
 
-rootProject.name = "spring-boot-security-util"
-
-include(":app")
 
 
 

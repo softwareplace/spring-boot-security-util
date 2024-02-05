@@ -1,4 +1,3 @@
-import com.github.softwareplace.springboot.buildconfiguration.Dependencies
 import com.github.softwareplace.springboot.kotlin.*
 
 plugins {
@@ -6,11 +5,15 @@ plugins {
     id("com.github.softwareplace.springboot.kotlin-submodule")
 }
 
-val currentVersion = "0.0.4"
+val currentVersion = "1.0.001-SNAPSHOT"
 val appGroup = "com.softwareplace.springsecurity"
+
+val jdkVersion: String by project
 
 group = appGroup
 version = currentVersion
+
+println(jdkVersion)
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
@@ -22,14 +25,13 @@ publishing {
             groupId = "com.softwareplace"
             artifactId = "spring-boot-security-util"
             version = currentVersion
-            java.sourceCompatibility = JavaVersion.toVersion(Dependencies.Version.jdkVersion)
-            java.targetCompatibility = JavaVersion.toVersion(Dependencies.Version.jdkVersion)
+            java.sourceCompatibility = JavaVersion.toVersion(jdkVersion)
+            java.targetCompatibility = JavaVersion.toVersion(jdkVersion)
 
             from(components["java"])
         }
     }
 }
-
 
 dependencies {
     springConfigurationProcessor()
