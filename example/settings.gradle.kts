@@ -1,5 +1,3 @@
-import java.util.*
-
 rootProject.name = "spring-boot-security-util-example"
 
 include(":app")
@@ -23,9 +21,9 @@ buildscript {
         mavenLocal()
         gradlePluginPortal()
         maven("https://jitpack.io")
-        maven("https://repo.spring.io/milestone")
     }
+
     dependencies {
-        classpath("com.github.softwareplace.springboot:plugins:0.0.1")
+        classpath("com.github.softwareplace.springboot:plugins:1.0.10")
     }
 }

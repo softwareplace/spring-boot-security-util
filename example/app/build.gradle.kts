@@ -1,17 +1,25 @@
-import com.github.softwareplace.springboot.kotlin.*
+import com.github.softwareplace.springboot.kotlin.kotlinMapStruct
+import com.github.softwareplace.springboot.kotlin.kotlinReactive
+import com.github.softwareplace.springboot.kotlin.openapi.kotlinOpenApiSettings
+import com.github.softwareplace.springboot.kotlin.testKotlinMockito
+import com.github.softwareplace.springboot.utils.*
 
 plugins {
     id("com.github.softwareplace.springboot.kotlin")
-    id("com.github.softwareplace.springboot.kotlin-openapi")
 }
 
 group = "com.softwareplace.springsecurity.example"
 version = "1.0.0"
 
-openApiSettings(OpenApiSettings(reactive = true))
+kotlinOpenApiSettings {
+
+}
 
 dependencies {
     implementation(project(":security"))
+    springBootStartWeb()
+    kotlinMapStruct()
+    kotlinReactive()
     springSecurity()
     springJettyApi()
     springWebFlux()
@@ -19,10 +27,9 @@ dependencies {
     jsonWebToken()
     jsonLogger()
     postgresql()
-    mappstruct()
     retrofit2()
     passay()
 
     testContainersPostgresql()
-    test()
+    testKotlinMockito()
 }
