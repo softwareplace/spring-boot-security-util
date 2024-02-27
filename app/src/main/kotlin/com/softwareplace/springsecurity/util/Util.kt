@@ -1,6 +1,5 @@
 package com.softwareplace.springsecurity.util
 
-import io.mockk.InternalPlatformDsl.toStr
 import jakarta.validation.ConstraintViolation
 import org.hibernate.validator.internal.engine.ConstraintViolationImpl
 import java.util.*
@@ -24,7 +23,7 @@ fun getMessagesFromConstraintViolation(constraintViolations: Set<ConstraintViola
                 constraintViolationMessages[propName] = setValues.toList()
             }
         } else {
-            val propName = "invalid${constraintViolation.propertyPath.toStr().replaceFirstChar { it.uppercase() }}"
+            val propName = "invalid${constraintViolation.propertyPath.toString().replaceFirstChar { it.uppercase() }}"
             val messages = buildMessage(constraintViolation)
             constraintViolationMessages[propName] = messages
         }
@@ -40,9 +39,9 @@ private fun <T> buildMessage(
 }
 
 private fun <T> getMessageValues(value: Any?, constraintViolation: ConstraintViolation<T>): List<String> {
-    if (value?.toStr().isNullOrBlank()) {
+    if (value?.toString().isNullOrBlank()) {
         return buildMessage(constraintViolation)
     }
-    return listOf(value.toStr())
+    return listOf(value.toString())
 }
 
