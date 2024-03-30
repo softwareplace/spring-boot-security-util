@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails
 
 interface UserData : UserDetails {
     val roles get():List<String> = emptyList()
-    val scopes get():List<String> = emptyList()
 
     open fun authToken() = ""
     override fun getAuthorities() = emptyList<SimpleGrantedAuthority>()

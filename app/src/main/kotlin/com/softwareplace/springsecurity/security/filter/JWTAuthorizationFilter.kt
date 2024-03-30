@@ -1,15 +1,13 @@
 package com.softwareplace.springsecurity.security.filter
 
-import com.auth0.jwt.exceptions.JWTVerificationException
-import com.auth0.jwt.interfaces.DecodedJWT
 import com.softwareplace.springsecurity.authorization.AuthorizationHandler
-import com.softwareplace.springsecurity.authorization.JWTSystem
 import com.softwareplace.springsecurity.authorization.ResponseRegister
 import com.softwareplace.springsecurity.config.ApplicationInfo
 import com.softwareplace.springsecurity.exception.UnauthorizedAccessExceptionApi
 import com.softwareplace.springsecurity.extension.asPathRegex
 import com.softwareplace.springsecurity.model.toAuthorizationUser
 import com.softwareplace.springsecurity.service.AuthorizationUserService
+import com.softwareplace.springsecurity.service.JwtService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -17,17 +15,20 @@ import org.slf4j.event.Level
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.oauth2.jwt.Jwt
+import org.springframework.security.oauth2.jwt.JwtValidationException
 import org.springframework.stereotype.Component
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.filter.OncePerRequestFilter
 import java.security.SignatureException
 
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @Component
 class JWTAuthorizationFilter(
     private val authorizationUserService: AuthorizationUserService,
     private val authorizationHandler: AuthorizationHandler,
     private val applicationInfo: ApplicationInfo,
-    private val jwtSystem: JWTSystem
+    private val jwtService: JwtService
 ) : OncePerRequestFilter() {
 
     fun isOpenUrl(requestPath: String): Boolean {
@@ -56,7 +57,7 @@ class JWTAuthorizationFilter(
                     ResponseRegister.register(request, response, exception).level(Level.ERROR).run()
                 }
 
-                is JWTVerificationException -> {
+                is JwtValidationException -> {
                     response.status = HttpServletResponse.SC_UNAUTHORIZED
                     ResponseRegister.register(request, response).level(Level.ERROR).run()
                 }
@@ -76,12 +77,9 @@ class JWTAuthorizationFilter(
     }
 
     private fun getUsernamePasswordAuthenticationToken(request: HttpServletRequest): UsernamePasswordAuthenticationToken {
-        val decodedJWT: DecodedJWT? = jwtSystem.getJwt(request)
+        val jwt: Jwt = jwtService.getJwt(request)
 
-        val userData = when (decodedJWT != null) {
-            true -> authorizationUserService.findUser(decodedJWT.subject)
-            false -> null
-        }
+        val userData = authorizationUserService.findUser(jwt.subject)
 
         userData?.run {
             authorizationHandler.authorizationSuccessfully(request, this)
@@ -96,8 +94,6 @@ class JWTAuthorizationFilter(
     }
 
     companion object {
-        const val BEARER = "Bearer "
-        const val BASIC = "Basic "
         const val UNAUTHORIZED_ERROR_MESSAGE = "Access was not authorized on this request."
         const val ROLE = "ROLE_"
         const val ERROR_RESPONSE_MESSAGE = "Access denied."

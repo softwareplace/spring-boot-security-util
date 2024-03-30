@@ -4,8 +4,8 @@ package com.softwareplace.springsecurity.authorization
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.jsonlogger.log.JsonLog
 import com.softwareplace.jsonlogger.log.kLogger
-import com.softwareplace.springsecurity.authorization.JWTSystem.Companion.JWT_KEY
 import com.softwareplace.springsecurity.exception.ApiBaseException
+import com.softwareplace.springsecurity.service.JwtService.Companion.JWT_KEY
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import java.io.IOException

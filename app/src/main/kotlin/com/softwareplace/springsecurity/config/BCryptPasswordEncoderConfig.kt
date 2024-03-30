@@ -1,5 +1,6 @@
 package com.softwareplace.springsecurity.config
 
+import com.softwareplace.springsecurity.encrypt.Encrypt
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -11,6 +12,8 @@ class BCryptPasswordEncoderConfig(
 
     @Bean
     fun bCryptPasswordEncoderConfig(): BCryptPasswordEncoder {
-        return BCryptPasswordEncoder(applicationInfo.encryptStrength)
+        val bCryptPasswordEncoder = BCryptPasswordEncoder(applicationInfo.encryptStrength)
+        Encrypt.bCryptPasswordEncoder = bCryptPasswordEncoder
+        return bCryptPasswordEncoder
     }
 }

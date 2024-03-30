@@ -6,7 +6,6 @@ import java.util.*
 @Suppress("JoinDeclarationAndAssignment", "MemberVisibilityCanBePrivate")
 class Encrypt(
     private val password: String,
-    private val bCryptPasswordEncoder: BCryptPasswordEncoder,
 ) {
     val encodedPassword: String
     val token: String
@@ -27,5 +26,9 @@ class Encrypt(
 
     fun isValidPassword(encodedPassword: String?): Boolean {
         return bCryptPasswordEncoder.matches(password, encodedPassword)
+    }
+
+    companion object {
+        lateinit var bCryptPasswordEncoder: BCryptPasswordEncoder
     }
 }

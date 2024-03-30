@@ -4,6 +4,7 @@ import VARCHAR_100_COLUMN_DEFINITION
 import VARCHAR_150_COLUMN_DEFINITION
 import VARCHAR_20_COLUMN_DEFINITION
 import VARCHAR_60_COLUMN_DEFINITION
+import com.softwareplace.springsecurity.encrypt.Encrypt
 import com.softwareplace.springsecurity.model.UserData
 import com.softwareplace.springsecurity.validator.annotation.ValidCpfCnpj
 import com.softwareplace.springsecurity.validator.annotation.ValidEmail
@@ -40,7 +41,7 @@ data class AppUserData(
     var createdAt: LocalDateTime? = null,
 
     @Column(name = "password", columnDefinition = VARCHAR_60_COLUMN_DEFINITION, nullable = false)
-    var pass: String,
+    private var pass: String,
 
     @Column(name = "token", columnDefinition = VARCHAR_60_COLUMN_DEFINITION, nullable = false)
     var token: String? = null
@@ -48,10 +49,13 @@ data class AppUserData(
 
     @Transient
     @ValidPassword(onErrorUseName = "invalidPassword")
-    var userPasswordValidate: String = pass
+    private var userPasswordValidate: String = pass
 
     @PrePersist
     fun beforeCreate() {
+        val encrypt = Encrypt(pass)
+        pass = encrypt.encodedPassword
+        token = encrypt.authToken
         createdAt = LocalDateTime.now().atZone(TimeZone.getTimeZone("America/Sao_Paulo").toZoneId()).toLocalDateTime()
     }
 

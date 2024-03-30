@@ -3,13 +3,13 @@ package com.softwareplace.springsecurity.security.filter
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.springsecurity.authorization.AuthorizationHandler
-import com.softwareplace.springsecurity.authorization.JWTSystem
-import com.softwareplace.springsecurity.authorization.JWTSystem.Companion.JWT_KEY
 import com.softwareplace.springsecurity.authorization.ResponseRegister
 import com.softwareplace.springsecurity.encrypt.Encrypt
 import com.softwareplace.springsecurity.model.RequestUser
 import com.softwareplace.springsecurity.model.UserData
 import com.softwareplace.springsecurity.service.AuthorizationUserService
+import com.softwareplace.springsecurity.service.JwtService
+import com.softwareplace.springsecurity.service.JwtService.Companion.JWT_KEY
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -18,16 +18,14 @@ import org.slf4j.event.Level
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
 class JWTAuthenticationFilter(
     private val authorizationUserService: AuthorizationUserService,
     private val authorizationHandler: AuthorizationHandler,
-    private val jwtSystem: JWTSystem,
-    private val authenticationManager: AuthenticationManager,
-    private val bCryptPasswordEncoder: BCryptPasswordEncoder
+    private val jwtService: JwtService,
+    private val authenticationManager: AuthenticationManager
 ) : AbstractAuthenticationProcessingFilter(
     AntPathRequestMatcher(AUTHORIZATION_PATH, METHOD_POST),
     authenticationManager
@@ -56,7 +54,7 @@ class JWTAuthenticationFilter(
     ): Authentication? {
         buildUserRequest(httpServletRequest)?.let { requestUser ->
             authorizationUserService.findUser(requestUser)?.let { userData ->
-                val encrypt = Encrypt(requestUser.password, bCryptPasswordEncoder)
+                val encrypt = Encrypt(requestUser.password)
                 if (encrypt.isValidPassword(userData.password)) {
                     return authorizationBuild(httpServletRequest, userData, requestUser)
                 }
@@ -93,10 +91,10 @@ class JWTAuthenticationFilter(
 
         return when {
             tokenExpiration != null -> {
-                jwtSystem.jwtGenerate(userData.authToken(), claims, tokenExpiration)
+                jwtService.jwtGenerate(userData.authToken(), claims, tokenExpiration)
             }
 
-            else -> jwtSystem.jwtGenerate(userData.authToken(), claims)
+            else -> jwtService.jwtGenerate(userData.authToken(), claims)
         }
     }
 
