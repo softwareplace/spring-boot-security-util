@@ -12,6 +12,9 @@ spring:
       hibernate.format_sql: true
 
   security:
+    encrypt-strength: 6
+    pub-key: classpath:pub.key
+    private-key: classpath:private.key
     issuer: spring-boot-security-utils-example
     stackTraceLogEnable: true
     jwtExpirationTime: 144000000

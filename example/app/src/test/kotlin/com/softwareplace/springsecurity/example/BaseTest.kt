@@ -1,6 +1,8 @@
 package com.softwareplace.springsecurity.example
 
 import com.softwareplace.springsecurity.SpringSecurityInit
+import com.softwareplace.springsecurity.config.ApplicationInfo
+import com.softwareplace.springsecurity.encrypt.Encrypt
 import com.softwareplace.springsecurity.example.client.ApiClient
 import com.softwareplace.springsecurity.example.config.DatabaseConnection
 import com.softwareplace.springsecurity.example.factory.ObjectMapperFactory
@@ -14,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.test.context.ContextConfiguration
 import retrofit2.Retrofit
 import retrofit2.create
@@ -34,6 +37,13 @@ abstract class BaseTest {
     @Autowired
     protected lateinit var repository: UserRepository
 
+    @Autowired
+    protected lateinit var bCryptPasswordEncoder: BCryptPasswordEncoder
+
+    @Autowired
+    protected lateinit var applicationInfo: ApplicationInfo
+    
+
     val baseApiUrl: String by lazy { "http://127.0.0.1:${port}" }
 
     protected val apiClient: ApiClient by lazy {
@@ -49,7 +59,12 @@ abstract class BaseTest {
         val stream = javaClass.classLoader.getResourceAsStream("user.json")
         ObjectMapperFactory.factory()
             .readValue(stream, AppUserData::class.java)
-            .let(repository::save)
+            .apply {
+                val encrypt = Encrypt(pass, bCryptPasswordEncoder)
+                userPasswordValidate = pass
+                token = encrypt.authToken
+                pass = encrypt.encodedPassword
+            }.let(repository::save)
     }
 
     fun getAuthorization(email: String, pass: String): String {

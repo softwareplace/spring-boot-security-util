@@ -14,10 +14,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.*
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
 
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfig(
@@ -27,7 +29,8 @@ class WebSecurityConfig(
     private val controllerAdvice: ControllerExceptionAdvice,
     private val jwtAuthorizationFilter: JWTAuthorizationFilter,
     private val authorizationUserService: AuthorizationUserService,
-    private val authenticationConfiguration: AuthenticationConfiguration
+    private val authenticationConfiguration: AuthenticationConfiguration,
+    private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) {
 
     private val authenticationFilter: JWTAuthenticationFilter by lazy {
@@ -35,7 +38,8 @@ class WebSecurityConfig(
             authorizationUserService,
             authorizationHandler,
             jwtSystem,
-            authenticationConfiguration.authenticationManager
+            authenticationConfiguration.authenticationManager,
+            bCryptPasswordEncoder
         )
     }
 

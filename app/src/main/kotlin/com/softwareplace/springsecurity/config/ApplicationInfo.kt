@@ -1,6 +1,9 @@
 package com.softwareplace.springsecurity.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 
 @ConfigurationProperties(prefix = "spring.security")
 class ApplicationInfo {
@@ -9,6 +12,23 @@ class ApplicationInfo {
      * [issuer] the issuer identifier
      */
     lateinit var issuer: String
+
+    /**
+     * [pubKey] the public jwt generate key file path
+     */
+    lateinit var pubKey: RSAPublicKey
+
+    /**
+     * [privateKey] the private jwt generate key file path
+     */
+    lateinit var privateKey: RSAPrivateKey
+
+    /**
+     * [encryptStrength] the log rounds to use, between 4 and 31 required by [BCryptPasswordEncoder].
+     *
+     * Uses strength as 6 if note set.
+     * */
+    var encryptStrength: Int = 6
 
     /**
      * Jwt generator secret key

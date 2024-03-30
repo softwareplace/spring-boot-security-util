@@ -18,6 +18,7 @@ import org.slf4j.event.Level
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 
@@ -26,6 +27,7 @@ class JWTAuthenticationFilter(
     private val authorizationHandler: AuthorizationHandler,
     private val jwtSystem: JWTSystem,
     private val authenticationManager: AuthenticationManager,
+    private val bCryptPasswordEncoder: BCryptPasswordEncoder
 ) : AbstractAuthenticationProcessingFilter(
     AntPathRequestMatcher(AUTHORIZATION_PATH, METHOD_POST),
     authenticationManager
@@ -54,7 +56,7 @@ class JWTAuthenticationFilter(
     ): Authentication? {
         buildUserRequest(httpServletRequest)?.let { requestUser ->
             authorizationUserService.findUser(requestUser)?.let { userData ->
-                val encrypt = Encrypt(requestUser.password)
+                val encrypt = Encrypt(requestUser.password, bCryptPasswordEncoder)
                 if (encrypt.isValidPassword(userData.password)) {
                     return authorizationBuild(httpServletRequest, userData, requestUser)
                 }
