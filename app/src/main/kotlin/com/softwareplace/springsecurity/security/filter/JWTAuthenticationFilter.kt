@@ -3,13 +3,13 @@ package com.softwareplace.springsecurity.security.filter
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.softwareplace.springsecurity.authorization.AuthorizationHandler
-import com.softwareplace.springsecurity.authorization.JWTSystem
-import com.softwareplace.springsecurity.authorization.JWTSystem.Companion.JWT_KEY
 import com.softwareplace.springsecurity.authorization.ResponseRegister
 import com.softwareplace.springsecurity.encrypt.Encrypt
 import com.softwareplace.springsecurity.model.RequestUser
 import com.softwareplace.springsecurity.model.UserData
 import com.softwareplace.springsecurity.service.AuthorizationUserService
+import com.softwareplace.springsecurity.service.JwtService
+import com.softwareplace.springsecurity.service.JwtService.Companion.JWT_KEY
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -24,8 +24,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 class JWTAuthenticationFilter(
     private val authorizationUserService: AuthorizationUserService,
     private val authorizationHandler: AuthorizationHandler,
-    private val jwtSystem: JWTSystem,
-    private val authenticationManager: AuthenticationManager,
+    private val jwtService: JwtService,
+    private val authenticationManager: AuthenticationManager
 ) : AbstractAuthenticationProcessingFilter(
     AntPathRequestMatcher(AUTHORIZATION_PATH, METHOD_POST),
     authenticationManager
@@ -91,10 +91,10 @@ class JWTAuthenticationFilter(
 
         return when {
             tokenExpiration != null -> {
-                jwtSystem.jwtGenerate(userData.authToken(), claims, tokenExpiration)
+                jwtService.jwtGenerate(userData.authToken(), claims, tokenExpiration)
             }
 
-            else -> jwtSystem.jwtGenerate(userData.authToken(), claims)
+            else -> jwtService.jwtGenerate(userData.authToken(), claims)
         }
     }
 
@@ -128,6 +128,7 @@ class JWTAuthenticationFilter(
             params
         ).level(Level.INFO).run()
         authorizationUserService.successfulAuthentication(request, response, chain, authResult)
+        super.successfulAuthentication(request, response, chain, authResult)
     }
 
     companion object {

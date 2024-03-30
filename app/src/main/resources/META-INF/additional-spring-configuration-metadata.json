@@ -1,6 +1,35 @@
 {
   "properties": [
     {
+      "name": "spring.security.issuer",
+      "type": "java.lang.String",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "issuer",
+      "description": "List of URLs that are open to access without authentication."
+    },
+    {
+      "name": "spring.security.pubKey",
+      "type": "java.security.interfaces.RSAPublicKey",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "pubKey",
+      "description": "The public jwt api key file path."
+    },
+    {
+      "name": "spring.security.privateKey",
+      "type": "java.security.interfaces.RSAPrivateKey",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "privateKey",
+      "description": "The private jwt api key file path."
+    },
+    {
+      "name": "spring.security.encryptStrength",
+      "type": "java.lang.Integer",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "privateKey",
+      "description": "the log rounds to use, between 4 and 31 required by org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.",
+      "defaultValue": 6
+    },
+    {
       "name": "spring.security.openUrl",
       "type": "java.util.List<java.lang.String>",
       "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
@@ -61,13 +90,6 @@
       "method": "corsConfigPattern",
       "description": "CORS configuration pattern.",
       "defaultValue": "/**"
-    },
-    {
-      "name": "spring.security.securitySecret",
-      "type": "java.lang.String",
-      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
-      "method": "securitySecret",
-      "description": "Security secret for the application."
     },
     {
       "name": "spring.security.stackTraceLogEnable",

@@ -5,6 +5,7 @@ import com.softwareplace.springsecurity.model.UserData
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.oauth2.jwt.JwtDecoder
 
 interface AuthorizationHandler {
     fun authorizationSuccessfully(request: HttpServletRequest, userData: UserData) {
@@ -22,5 +23,12 @@ interface AuthorizationHandler {
 
     fun onAuthorizationFailed(request: HttpServletRequest, response: HttpServletResponse) {
         // Override this method if you need
+    }
+
+    /**
+     * If return null the default [JwtDecoder] will be used.
+     * */
+    fun jwtDecoder(): JwtDecoder? {
+        return null
     }
 }

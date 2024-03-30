@@ -1,14 +1,34 @@
 package com.softwareplace.springsecurity.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 
 @ConfigurationProperties(prefix = "spring.security")
 class ApplicationInfo {
 
     /**
-     * Jwt generator secret key
+     * [issuer] the issuer identifier
+     */
+    lateinit var issuer: String
+
+    /**
+     * [pubKey] the public jwt generate key file path
+     */
+    lateinit var pubKey: RSAPublicKey
+
+    /**
+     * [privateKey] the private jwt generate key file path
+     */
+    lateinit var privateKey: RSAPrivateKey
+
+    /**
+     * [encryptStrength] the log rounds to use, between 4 and 31 required by [BCryptPasswordEncoder].
+     *
+     * Uses strength as 6 if note set.
      * */
-    lateinit var securitySecret: String
+    var encryptStrength: Int = 6
 
     /**
      * List of URLs that are open to access without authentication.

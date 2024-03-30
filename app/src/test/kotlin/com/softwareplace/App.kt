@@ -1,5 +1,6 @@
 package com.softwareplace
 
+import com.softwareplace.springsecurity.SpringSecurityInit
 import com.softwareplace.springsecurity.authorization.AuthorizationHandler
 import com.softwareplace.springsecurity.model.RequestUser
 import com.softwareplace.springsecurity.model.UserData
@@ -9,11 +10,13 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 
 
 @SpringBootApplication
+@ComponentScan(basePackageClasses = [SpringSecurityInit::class])
 class App {
 
     @Bean

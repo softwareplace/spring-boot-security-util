@@ -1,3 +1,4 @@
+import com.github.softwareplace.springboot.buildconfiguration.addSpringframeworkBoot
 import com.github.softwareplace.springboot.kotlin.testKotlinMockito
 import com.github.softwareplace.springboot.utils.*
 
@@ -6,7 +7,7 @@ plugins {
     id("com.github.softwareplace.springboot.kotlin")
 }
 
-val currentVersion = "1.0.0"
+val currentVersion = "1.0.2"
 val appGroup = "com.softwareplace.springsecurity"
 
 val jdkVersion: String by project
@@ -35,9 +36,9 @@ publishing {
 }
 
 dependencies {
+    addSpringframeworkBoot("spring-boot-starter-oauth2-resource-server")
     springBootStartWeb()
     springSecurity()
-    jsonWebToken()
     jsonLogger()
     passay()
 

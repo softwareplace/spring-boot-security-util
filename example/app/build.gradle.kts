@@ -1,3 +1,4 @@
+import com.github.softwareplace.springboot.buildconfiguration.addSpringframeworkBoot
 import com.github.softwareplace.springboot.kotlin.kotlinMapStruct
 import com.github.softwareplace.springboot.kotlin.kotlinReactive
 import com.github.softwareplace.springboot.kotlin.openapi.kotlinOpenApiSettings
@@ -16,6 +17,9 @@ kotlinOpenApiSettings {
 }
 
 dependencies {
+    addSpringframeworkBoot("spring-boot-starter-oauth2-resource-server")
+    implementation("com.h2database:h2")
+
     implementation(project(":security"))
     springBootStartWeb()
     kotlinMapStruct()
@@ -24,7 +28,6 @@ dependencies {
     springJettyApi()
     springWebFlux()
     springDataJpa()
-    jsonWebToken()
     jsonLogger()
     postgresql()
     retrofit2()

@@ -2,7 +2,6 @@ package com.softwareplace.springsecurity.example
 
 import com.softwareplace.springsecurity.SpringSecurityInit
 import com.softwareplace.springsecurity.example.client.ApiClient
-import com.softwareplace.springsecurity.example.config.DatabaseConnection
 import com.softwareplace.springsecurity.example.factory.ObjectMapperFactory
 import com.softwareplace.springsecurity.example.model.AppUserData
 import com.softwareplace.springsecurity.example.repository.UserRepository
@@ -10,18 +9,16 @@ import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.ComponentScan
-import org.springframework.test.context.ContextConfiguration
 import retrofit2.Retrofit
 import retrofit2.create
 
 
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@ContextConfiguration(initializers = [DatabaseConnection.Initializer::class])
 @SpringBootTest(classes = [MainApp::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ContextConfiguration(initializers = [DatabaseConnection.Initializer::class])
 @ComponentScan(basePackageClasses = [SpringSecurityInit::class])
 abstract class BaseTest {
 
