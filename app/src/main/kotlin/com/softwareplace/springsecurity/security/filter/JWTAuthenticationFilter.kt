@@ -128,6 +128,7 @@ class JWTAuthenticationFilter(
             params
         ).level(Level.INFO).run()
         authorizationUserService.successfulAuthentication(request, response, chain, authResult)
+        super.successfulAuthentication(request, response, chain, authResult)
     }
 
     companion object {
