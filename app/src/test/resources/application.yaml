@@ -1,21 +1,9 @@
-server:
-  servlet:
-    context-path: /api/spring-security-example/
-
 spring:
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate.format_sql: true
-
   security:
     encrypt-strength: 6
     pub-key: classpath:pub.key
     private-key: classpath:private.key
-    issuer: spring-boot-security-utils-example
+    issuer: spring-boot-security-util-example
     stackTraceLogEnable: true
     jwtExpirationTime: 144000000
     openUrl:

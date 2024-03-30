@@ -12,16 +12,16 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configurers.*
-import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter
+import java.util.*
+
 
 @Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfig(
+    private val decoder: JwtDecoder,
     private val jwtService: JwtService,
     private val applicationInfo: ApplicationInfo,
     private val authorizationHandler: AuthorizationHandler,
@@ -29,6 +29,7 @@ class WebSecurityConfig(
     private val jwtAuthorizationFilter: JWTAuthorizationFilter,
     private val authorizationUserService: AuthorizationUserService,
     private val authenticationConfiguration: AuthenticationConfiguration,
+    private val securityFilterChainConfig: Optional<SecurityFilterChainConfig>
 ) {
 
     private val authenticationFilter: JWTAuthenticationFilter by lazy {
@@ -40,40 +41,21 @@ class WebSecurityConfig(
         )
     }
 
+    private val chainConfig: SecurityFilterChainConfig by lazy {
+        securityFilterChainConfig.orElse(
+            SecurityFilterChainConfig(
+                decoder,
+                applicationInfo,
+                authorizationHandler,
+                controllerAdvice,
+                authenticationFilter,
+                jwtAuthorizationFilter
+            )
+        )
+    }
+
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        return http.csrf(this::csrf)
-            .cors(this::corsConfiguration)
-            .authorizeHttpRequests(this::authorizeHttpRequest)
-            .exceptionHandling(this::exceptionHandler)
-            .addFilterBefore(authenticationFilter, BasicAuthenticationFilter::class.java)
-            .addFilterAfter(jwtAuthorizationFilter, AnonymousAuthenticationFilter::class.java)
-            .sessionManagement(this::sessionManagement)
-            .build()
-    }
-
-    private fun csrf(csrf: CsrfConfigurer<HttpSecurity>) {
-        csrf.disable()
-    }
-
-    private fun sessionManagement(session: SessionManagementConfigurer<HttpSecurity>) {
-        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-    }
-
-    private fun corsConfiguration(cors: CorsConfigurer<HttpSecurity>) {
-        cors.apply { }
-    }
-
-    private fun authorizeHttpRequest(authorize: AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry) {
-        authorize
-            .requestMatchers(*applicationInfo.openUrl.toTypedArray())
-            .permitAll()
-            .anyRequest()
-            .fullyAuthenticated()
-    }
-
-    private fun exceptionHandler(handler: ExceptionHandlingConfigurer<HttpSecurity>) {
-        handler.authenticationEntryPoint(controllerAdvice)
-            .accessDeniedHandler(controllerAdvice)
+        return chainConfig.securityFilterChain(http)
     }
 }

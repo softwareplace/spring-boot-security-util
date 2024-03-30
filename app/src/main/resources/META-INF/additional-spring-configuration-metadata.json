@@ -92,13 +92,6 @@
       "defaultValue": "/**"
     },
     {
-      "name": "spring.security.securitySecret",
-      "type": "java.lang.String",
-      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
-      "method": "securitySecret",
-      "description": "Security secret for the application."
-    },
-    {
       "name": "spring.security.stackTraceLogEnable",
       "type": "java.lang.Boolean",
       "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",

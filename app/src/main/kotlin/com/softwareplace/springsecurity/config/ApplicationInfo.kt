@@ -31,11 +31,6 @@ class ApplicationInfo {
     var encryptStrength: Int = 6
 
     /**
-     * Jwt generator secret key
-     * */
-    lateinit var securitySecret: String
-
-    /**
      * List of URLs that are open to access without authentication.
      * ## Example:
      * - /swagger-uit/<a>**</a>

@@ -44,6 +44,7 @@ import java.io.IOException
 import java.util.*
 
 
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
 @ControllerAdvice(annotations = [RestController::class])
