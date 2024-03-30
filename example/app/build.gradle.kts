@@ -18,6 +18,8 @@ kotlinOpenApiSettings {
 
 dependencies {
     addSpringframeworkBoot("spring-boot-starter-oauth2-resource-server")
+    implementation("com.h2database:h2")
+
     implementation(project(":security"))
     springBootStartWeb()
     kotlinMapStruct()

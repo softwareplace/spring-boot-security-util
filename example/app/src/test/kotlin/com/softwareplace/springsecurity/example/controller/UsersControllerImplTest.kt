@@ -56,7 +56,7 @@ class UsersControllerImplTest : BaseTest() {
 
     @Test
     fun `must to return user profile based on authorization token`() {
-        val authorization = getAuthorization("springutil+example01@email.com", "x\$mpFedts2")
+        val authorization = getAuthorization("springutil+example01@email.com", "xGKm&pFedts2")
 
         val detailResponse = apiClient.get(authorization).execute()
 

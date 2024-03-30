@@ -7,7 +7,7 @@ plugins {
     id("com.github.softwareplace.springboot.kotlin")
 }
 
-val currentVersion = "1.0.0"
+val currentVersion = "1.0.2"
 val appGroup = "com.softwareplace.springsecurity"
 
 val jdkVersion: String by project
