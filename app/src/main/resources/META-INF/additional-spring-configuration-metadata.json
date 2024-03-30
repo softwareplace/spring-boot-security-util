@@ -1,6 +1,14 @@
 {
   "properties": [
     {
+      "name": "spring.security.issuer",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
+      "method": "issuer",
+      "description": "List of URLs that are open to access without authentication.",
+      "defaultValue": []
+    },
+    {
       "name": "spring.security.openUrl",
       "type": "java.util.List<java.lang.String>",
       "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",

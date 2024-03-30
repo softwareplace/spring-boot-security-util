@@ -6,6 +6,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class ApplicationInfo {
 
     /**
+     * [issuer] the issuer identifier
+     */
+    lateinit var issuer: String
+
+    /**
      * Jwt generator secret key
      * */
     lateinit var securitySecret: String

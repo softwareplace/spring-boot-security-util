@@ -1,3 +1,4 @@
+import com.github.softwareplace.springboot.buildconfiguration.addSpringframeworkBoot
 import com.github.softwareplace.springboot.kotlin.testKotlinMockito
 import com.github.softwareplace.springboot.utils.*
 
@@ -35,6 +36,7 @@ publishing {
 }
 
 dependencies {
+    addSpringframeworkBoot("spring-boot-starter-oauth2-resource-server")
     springBootStartWeb()
     springSecurity()
     jsonWebToken()

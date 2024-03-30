@@ -12,6 +12,7 @@ spring:
       hibernate.format_sql: true
 
   security:
+    issuer: spring-boot-security-utils-example
     stackTraceLogEnable: true
     jwtExpirationTime: 144000000
     securitySecret: $2a$05$j6nRMrELeCnQ2k7BxoHV
