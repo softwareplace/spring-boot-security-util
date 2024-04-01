@@ -41,6 +41,7 @@ openssl rsa -pubout -in private.key -out ./pub.key
 ```yaml
 spring:
   security:
+    issuer: my-app
     encrypt-strength: 6
     pub-key: file:/opt/my-app/pub.key
     private-key: file:/opt/my-app/private.key
