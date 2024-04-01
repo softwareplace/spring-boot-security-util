@@ -29,6 +29,13 @@ fun main(args: Array<String>) {
 }
 ```
 
+## Generating simple api jwt generator key.
+
+```shell
+openssl genpkey -algorithm RSA -out ./private.key 
+openssl rsa -pubout -in private.key -out ./pub.key   
+```
+
 `application.yaml`
 
 ```yaml
