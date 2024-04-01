@@ -18,6 +18,7 @@ kotlinOpenApiSettings {
 
 dependencies {
     addSpringframeworkBoot("spring-boot-starter-oauth2-resource-server")
+    addSpringframeworkBoot("spring-boot-starter-actuator")
     implementation("com.h2database:h2")
 
     implementation(project(":security"))

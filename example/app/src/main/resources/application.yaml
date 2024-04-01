@@ -2,6 +2,12 @@ server:
   servlet:
     context-path: /api/spring-security-example/
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env
+
 spring:
   #  jpa:
   #    database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -11,11 +17,6 @@ spring:
   #    properties:
   #      hibernate.format_sql: true
 
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
@@ -42,6 +43,7 @@ spring:
       - "/v3/api-docs/**"
       - "/v3/api-docs"
       - "/webjars/**"
+      - "/actuator/**"
       - "/swagger/**"
       - "/assets/**"
       - "/csrf/**"
