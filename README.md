@@ -45,8 +45,7 @@ spring:
     encrypt-strength: 6
     pub-key: file:/opt/my-app/pub.key
     private-key: file:/opt/my-app/private.key
-    jwtExpirationTime: ${ENV_JWT_EXPIRATION_TIME}
-    securitySecret: ${ENV_SECURITY_SECRET}
+    jwtExpirationTime: 144000000
     stackTraceLogEnable: false
     openUrl:
       - "/swagger-resources/**"
