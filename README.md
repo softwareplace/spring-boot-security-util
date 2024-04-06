@@ -45,26 +45,23 @@ spring:
     encrypt-strength: 6
     pub-key: file:/opt/my-app/pub.key
     private-key: file:/opt/my-app/private.key
-    jwtExpirationTime: 144000000
-    stackTraceLogEnable: false
-    openUrl:
+    jwt-expiration-time: 144000000
+    stack-trace-log-enable: true
+    open-url:
       - "/swagger-resources/**"
       - "/swagger-ui.html/**"
       - "/swagger-config/**"
-      - "/authorization"
-      - "/swagger-ui/**"
       - "/favicon.ico/**"
       - "/v3/api-docs/**"
+      - "/authorization"
+      - "/swagger-ui/**"
       - "/v3/api-docs"
       - "/webjars/**"
       - "/swagger/**"
-      - "/v1/lights"
-      - "/v1/listener"
-      - "/health/**"
       - "/assets/**"
-      - "/error/**"
       - "/csrf/**"
       - "/docs/**"
+      - "/error"
 ```
 
 ### Dependency setting
