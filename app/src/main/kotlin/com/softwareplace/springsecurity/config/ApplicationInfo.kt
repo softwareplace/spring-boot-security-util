@@ -78,9 +78,9 @@ class ApplicationInfo {
 
     /**
      * Expiration time for JWT tokens. If not set, the generated jwt expires in 15 minutes.
-     * - Default: 900000
+     * - Default: 900
      * */
-    var jwtExpirationTime: Long = 900000L
+    var jwtExpirationTime: Long = 900L
 
     /**
      * When the [ControllerExceptionAdvice] handler some error,

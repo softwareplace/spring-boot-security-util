@@ -29,9 +29,9 @@ spring:
     encrypt-strength: 6
     pub-key: classpath:pub.key
     private-key: classpath:private.key
-    jwt-expiration-time: 144000000
-    stack-trace-log-enable: true
     issuer: spring-boot-security-util-example
+    stack-trace-log-enable: true
+    jwt-expiration-time: 900
     open-url:
       - "/users/create"
       - "/swagger-resources/**"
