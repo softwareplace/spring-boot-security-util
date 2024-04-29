@@ -81,7 +81,7 @@
       "sourceType": "com.softwareplace.springsecurity.config.ApplicationInfo",
       "method": "jwtExpirationTime",
       "description": "Expiration time for JWT tokens. If not set, the generated jwt expires in 15 minutes.",
-      "defaultValue": 900000
+      "defaultValue": 900
     },
     {
       "name": "spring.security.corsConfigPattern",

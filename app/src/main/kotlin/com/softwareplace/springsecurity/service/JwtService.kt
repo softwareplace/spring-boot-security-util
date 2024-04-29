@@ -20,6 +20,13 @@ class JwtService(
     private val decoder: JwtDecoder,
 ) {
 
+    /**
+     * Generate a jwt token
+     * @param subject the subject of the jwt
+     * @param claims the claims of the jwt
+     * @param expiration the expiration time in seconds of the jwt
+     * @return the jwt token
+     */
     fun jwtGenerate(
         subject: String,
         claims: Map<String, List<Any>> = mapOf(),
