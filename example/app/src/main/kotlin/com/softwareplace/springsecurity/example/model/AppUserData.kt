@@ -36,7 +36,6 @@ data class AppUserData(
     val cnpj: String,
 
     @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     var createdAt: LocalDateTime? = null,
 

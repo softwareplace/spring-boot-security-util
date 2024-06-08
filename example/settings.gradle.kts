@@ -24,6 +24,6 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.github.softwareplace.springboot:plugins:1.0.10")
+        classpath("com.github.softwareplace.springboot:plugins:1.0.12")
     }
 }
