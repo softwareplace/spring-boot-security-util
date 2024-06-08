@@ -45,8 +45,13 @@ spring:
     encrypt-strength: 6
     pub-key: file:/opt/my-app/pub.key
     private-key: file:/opt/my-app/private.key
-    jwt-expiration-time: 144000000
+    # Jwt expiration time in seconds
+    jwt-expiration-time: 900
     stack-trace-log-enable: true
+    # Redirects register
+    paths-redirect:
+      - name: "swagger-ui/index.html"
+        value: [ "/", "/docs", "/swagger" ]
     open-url:
       - "/swagger-resources/**"
       - "/swagger-ui.html/**"
@@ -60,8 +65,9 @@ spring:
       - "/swagger/**"
       - "/assets/**"
       - "/csrf/**"
-      - "/docs/**"
       - "/error"
+      - "/docs"
+      - "/"
 ```
 
 ### Dependency setting

@@ -2,8 +2,6 @@ package com.softwareplace.springsecurity.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import java.security.interfaces.RSAPrivateKey
-import java.security.interfaces.RSAPublicKey
 
 @ConfigurationProperties(prefix = "spring.security")
 class ApplicationInfo {
@@ -16,12 +14,12 @@ class ApplicationInfo {
     /**
      * [pubKey] the public jwt generate key file path
      */
-    lateinit var pubKey: RSAPublicKey
+    lateinit var pubKey: String
 
     /**
      * [privateKey] the private jwt generate key file path
      */
-    lateinit var privateKey: RSAPrivateKey
+    lateinit var privateKey: String
 
     /**
      * [encryptStrength] the log rounds to use, between 4 and 31 required by [BCryptPasswordEncoder].
@@ -88,5 +86,11 @@ class ApplicationInfo {
      * - Default: true
      * */
     var stackTraceLogEnable: Boolean = true
+
+    /**
+     * The name represents the path to be redirected and the value represents the paths that will be redirected to.
+     * */
+    var pathsRedirect: List<DataEntry<String, List<String>>> = emptyList()
 }
+
 

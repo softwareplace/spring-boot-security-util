@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /api/spring-security-example/
+    context-path: /api/spring-security-example/v1
 
 management:
   endpoints:
@@ -32,6 +32,9 @@ spring:
     issuer: spring-boot-security-util-example
     stack-trace-log-enable: true
     jwt-expiration-time: 900
+    paths-redirect:
+      - name: "swagger-ui/index.html"
+        value: [ "/", "/docs", "/swagger" ]
     open-url:
       - "/users/create"
       - "/swagger-resources/**"
@@ -49,3 +52,6 @@ spring:
       - "/csrf/**"
       - "/docs/**"
       - "/error"
+      - "/"
+
+
